@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <!-- Shield -->
+  <path fill="#2e7d32" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+  <!-- User: head -->
+  <circle cx="12" cy="6.5" r="1.9" fill="white"/>
+  <!-- User: shoulders/body dome -->
+  <path fill="white" d="M7.5 13.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5H7.5z"/>
+  <!-- Checkmark below user -->
+  <path fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9.5 17.5l2 2 4-5"/>
+</svg>

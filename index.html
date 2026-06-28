@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>designSense — Dark Pattern & UX Auditor</title>
+  <meta name="description" content="Instantly audit any web prototype for dark patterns and usability issues. 18 deceptive patterns + Nielsen's 10 heuristics. No data leaves your browser.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Inline data URI so favicon works from file:// without a separate request -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%232e7d32' d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z'/%3E%3Ccircle cx='12' cy='6.5' r='1.9' fill='white'/%3E%3Cpath fill='white' d='M7.5 13.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5H7.5z'/%3E%3Cpath fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' d='M9.5 17.5l2 2 4-5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ── Header ── -->
+  <header class="site-header">
+    <div class="container">
+      <div class="logo">design<span>Sense</span></div>
+      <nav class="nav">
+        <a href="#how-it-works">How it works</a>
+        <a href="#checks">What it checks</a>
+        <a href="#privacy">Privacy</a>
+        <a href="https://github.com/padmavathideviv/Designvalidator" target="_blank" rel="noopener" class="gh-link">
+          ★ GitHub
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- ── Hero / Install ── -->
+    <section class="hero">
+      <div class="container">
+
+        <div class="hero-badge">Free · Open Source · No Data Sharing · No Backend</div>
+
+        <p class="hero-eyebrow">For AI-generated prototypes &amp; designs</p>
+
+        <h1>Catch dark patterns &amp;<br>usability issues before you ship.</h1>
+
+        <p class="hero-sub">
+          Run instantly in your browser. Audits 27 deceptive patterns and Nielsen's 10 heuristics.
+          Every finding includes a specific fix. Nothing ever leaves your device.
+        </p>
+
+        <!-- Bookmarklet link — href is built inline by the loader script below -->
+        <a id="bookmarklet-link"
+           href="#"
+           class="bookmarklet-btn"
+           draggable="true"
+           title="Drag me to your bookmarks bar!">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+            <path fill="rgba(255,255,255,0.2)" stroke="white" stroke-width="1" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+            <circle cx="12" cy="6.5" r="1.9" fill="white"/>
+            <path fill="white" d="M7.5 13.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5H7.5z"/>
+            <path stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9.5 17.5l2 2 4-5"/>
+          </svg>
+          designSense
+        </a>
+
+        <div class="drag-hint">
+          <span class="drag-arrow">→</span> Drag to your bookmarks bar
+        </div>
+
+        <div class="hero-steps">
+          <span class="hero-step"><span class="hero-step-n">1</span> Drag to bookmarks bar</span>
+          <span class="hero-sep">·</span>
+          <span class="hero-step"><span class="hero-step-n">2</span> Open any prototype</span>
+          <span class="hero-sep">·</span>
+          <span class="hero-step"><span class="hero-step-n">3</span> Click — instant report</span>
+        </div>
+
+        <p class="csp-note">⚠ Some pages with strict Content Security Policies (CSP) block bookmarklets. This is the target site's own security setting — not a bug in this tool.</p>
+
+      </div>
+    </section>
+
+    <!-- ── Stats ── -->
+    <section class="stats-section">
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-num">27</span>
+          <span class="stat-label">Dark Patterns</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">10</span>
+          <span class="stat-label">UX Heuristics</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">0</span>
+          <span class="stat-label">Data Shared</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">0</span>
+          <span class="stat-label">Backend Needed</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── How it works ── -->
+    <section id="how-it-works" class="section">
+      <div class="container">
+        <h2>How it works</h2>
+        <p class="section-sub">One drag to install. One click to audit. No account, no extension, no server.</p>
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-icon">1</div>
+            <h3>Drag once</h3>
+            <p>Drag the button above to your bookmarks bar. One-time setup — works in Chrome, Firefox, Safari, Edge.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">2</div>
+            <h3>Open a prototype</h3>
+            <p>Navigate to any HTML or React web prototype in your browser tab.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">3</div>
+            <h3>Click &amp; analyze</h3>
+            <p>Click designSense in your bar. A Shadow DOM panel opens with instant findings.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-icon">4</div>
+            <h3>Fix &amp; export</h3>
+            <p>Click any issue to see the fix. Jump to the element on-page. Export the full report as JSON.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── What it checks ── -->
+    <section id="checks" class="section alt" data-ds-ignore>
+      <div class="container">
+        <h2>What it checks</h2>
+        <p class="section-sub">37 checks across two frameworks. Every issue includes severity and a specific fix.</p>
+
+        <div class="checks-stack">
+
+          <!-- ── Dark Patterns ── -->
+          <div class="check-block">
+            <div class="check-block-hd">
+              <div>
+                <h3 class="check-block-title">Dark Patterns</h3>
+                <p class="check-block-meta">Academic Classification · De Souza &amp; Avelar, 2021</p>
+              </div>
+              <span class="check-block-count">27</span>
+            </div>
+            <div class="dp-grid">
+
+              <div class="dp-cat">
+                <div class="dp-cat-name">Urgency</div>
+                <ul class="dp-list">
+                  <li><span class="tag high">High</span> Countdown timer</li>
+                  <li><span class="tag high">High</span> Limited time message</li>
+                </ul>
+              </div>
+
+              <div class="dp-cat">
+                <div class="dp-cat-name">Scarcity</div>
+                <ul class="dp-list">
+                  <li><span class="tag high">High</span> Low stock message</li>
+                  <li><span class="tag medium">Medium</span> High demand message</li>
+                </ul>
+              </div>
+
+              <div class="dp-cat">
+                <div class="dp-cat-name">Social Proof</div>
+                <ul class="dp-list">
+                  <li><span class="tag medium">Medium</span> Activity messages</li>
+                  <li><span class="tag medium">Medium</span> Testimonials</li>
+                </ul>
+              </div>
+
+              <div class="dp-cat">
+                <div class="dp-cat-name">Nagging</div>
+                <ul class="dp-list">
+                  <li><span class="tag medium">Medium</span> Nagging</li>
+                </ul>
+              </div>
+
+              <div class="dp-cat">
+                <div class="dp-cat-name">Obstruction</div>
+                <ul class="dp-list">
+                  <li><span class="tag high">High</span> Roach motel</li>
+                  <li><span class="tag high">High</span> Intermediate currency</li>
+                  <li><span class="tag medium">Medium</span> Immortal accounts</li>
+                  <li><span class="tag low">Low</span> Price comparison prevention</li>
+                </ul>
+              </div>
+
+              <div class="dp-cat">
+                <div class="dp-cat-name">Sneaking</div>
+                <ul class="dp-list">
+                  <li><span class="tag critical">Critical</span> Sneak into basket</li>
+                  <li><span class="tag critical">Critical</span> Hidden costs</li>
+                  <li><span class="tag critical">Critical</span> Bait and switch</li>
+                  <li><span class="tag high">High</span> Hidden subscription</li>
+                </ul>
+              </div>
+
+              <div class="dp-cat">
+                <div class="dp-cat-name">Interface Interference</div>
+                <ul class="dp-list">
+                  <li><span class="tag critical">Critical</span> Trick questions</li>
+                  <li><span class="tag high">High</span> Confirmshaming</li>
+                  <li><span class="tag high">High</span> False hierarchy</li>
+                  <li><span class="tag high">High</span> Toying with emotion</li>
+                  <li><span class="tag medium">Medium</span> Preselection</li>
+                  <li><span class="tag medium">Medium</span> Hidden information</li>
+                  <li><span class="tag medium">Medium</span> Disguised ad</li>
+                  <li><span class="tag low">Low</span> Cuteness</li>
+                </ul>
+              </div>
+
+              <div class="dp-cat">
+                <div class="dp-cat-name">Forced Action</div>
+                <ul class="dp-list">
+                  <li><span class="tag high">High</span> Forced registration</li>
+                  <li><span class="tag high">High</span> Privacy Zuckering</li>
+                  <li><span class="tag high">High</span> Friend spam</li>
+                  <li><span class="tag medium">Medium</span> Gamification</li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ── Nielsen's Heuristics ── -->
+          <div class="check-block">
+            <div class="check-block-hd">
+              <div>
+                <h3 class="check-block-title">Nielsen's 10 Heuristics</h3>
+                <p class="check-block-meta">DOM and CSS detection · per-check confidence level</p>
+              </div>
+              <span class="check-block-count">10</span>
+            </div>
+            <div class="heuristic-grid">
+              <div class="heuristic-item">
+                <span class="tag hc">High</span>
+                <span><strong>H1 System Status</strong> — loading states, progress indicators</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">High</span>
+                <span><strong>H3 User Control</strong> — confirmation on destructive actions</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">High</span>
+                <span><strong>H4 Consistency</strong> — heading hierarchy, single H1</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">High</span>
+                <span><strong>H5 Error Prevention</strong> — field types, required indicators</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">High</span>
+                <span><strong>H6 Recognition</strong> — icon-only buttons, breadcrumbs</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">High</span>
+                <span><strong>H8 Aesthetics</strong> — WCAG AA contrast, font scale</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag be">Best effort</span>
+                <span><strong>H2 Real World Match</strong> — technical jargon in UI copy</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag be">Best effort</span>
+                <span><strong>H7 Flexibility</strong> — skip link, search on long lists</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag be">Best effort</span>
+                <span><strong>H9 Error Recovery</strong> — generic error messages</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag be">Best effort</span>
+                <span><strong>H10 Help</strong> — password hints, empty state guidance</span>
+              </div>
+            </div>
+            <div class="heuristic-legend">
+              <strong>High confidence</strong> = reliable DOM/CSS detection. &nbsp;·&nbsp;
+              <strong>Best effort</strong> = text/pattern heuristic — review findings in context.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Privacy & Security ── -->
+    <section id="privacy" class="section">
+      <div class="container">
+        <h2>Privacy &amp; Security</h2>
+        <p class="section-sub">Built to be trusted — by design, not just by promise. Audit the source before you drag it.</p>
+
+        <div class="privacy-grid">
+          <div class="privacy-card">
+            <div class="privacy-icon">🔒</div>
+            <h3>Zero network calls</h3>
+            <p>The bookmarklet makes no fetch/XHR requests. Analysis runs entirely inside your browser tab. Nothing is transmitted anywhere.</p>
+          </div>
+          <div class="privacy-card">
+            <div class="privacy-icon">📖</div>
+            <h3>Open source &amp; auditable</h3>
+            <p>Every line of analysis logic is on GitHub. Read <code>src/bookmarklet.js</code> before you drag it. No obfuscation, no minified blobs.</p>
+          </div>
+          <div class="privacy-card">
+            <div class="privacy-icon">🛡️</div>
+            <h3>No eval(), no CDN</h3>
+            <p>Fully self-contained. No external libraries loaded at runtime. No dynamic code execution. Static, deterministic JS only.</p>
+          </div>
+          <div class="privacy-card">
+            <div class="privacy-icon">🎨</div>
+            <h3>Shadow DOM isolated</h3>
+            <p>Our report panel uses Shadow DOM — your page's styles don't affect it and ours don't pollute yours. We never modify your DOM.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Bottom CTA ── -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>Start auditing now.</h2>
+      <p>No account, no extension, no server. Just drag once and click on any prototype to get instant findings.</p>
+      <a id="cta-bookmarklet-link" href="#" class="cta-btn" draggable="true" title="Drag me to your bookmarks bar!">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+          <path fill="rgba(0,0,0,0.12)" stroke="currentColor" stroke-width="1" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
+          <circle cx="12" cy="6.5" r="1.9" fill="currentColor"/>
+          <path fill="currentColor" d="M7.5 13.5c0-2.5 2-4.5 4.5-4.5s4.5 2 4.5 4.5H7.5z"/>
+          <path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9.5 17.5l2 2 4-5"/>
+        </svg>
+        Drag designSense to your bar
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Footer ── -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>Built for designers, developers &amp; QA engineers who care about ethical, accessible design.</p>
+      <p>MIT License ·
+        <a href="https://github.com/padmavathideviv/Designvalidator" target="_blank" rel="noopener">View source on GitHub</a> ·
+        <a href="https://deceptive.design/types" target="_blank" rel="noopener">Deceptive Design reference</a> ·
+        <a href="https://www.nngroup.com/articles/ten-usability-heuristics/" target="_blank" rel="noopener">Nielsen Heuristics</a>
+      </p>
+    </div>
+    <div style="background:#cccccc; width:100%; padding:10px 0; text-align:center;">
+      <p style="color:#1a1a1a; font-size:13px; font-weight:500;">Created and directed by Padmavathi Verroju. Powered by Claude.</p>
+    </div>
+  </footer>
+
+  <!-- ──────────────────────────────────────────────────────────
+       Bookmarklet source — embedded directly so this page works
+       from file://, GitHub Pages, or any static server with no
+       build step. The browser does NOT execute this block.
+       ────────────────────────────────────────────────────────── -->
+  <script id="bm-src" type="text/plain">(function () {
+  'use strict';
+
+  var PANEL_ID = '__dv-root__';
+  var existing = document.getElementById(PANEL_ID);
+  if (existing) { existing.remove(); return; }
+
+  var issues = [];
+
+  function addIssue(category, type, severity, el, message, recommendation, confidence) {
+    issues.push({ category: category, type: type, severity: severity, el: el, message: message, recommendation: recommendation, confidence: confidence });
+  }
+
+  function parseRGB(color) {
+    var m = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    return m ? [+m[1], +m[2], +m[3]] : null;
+  }
+
+  function luminance(rgb) {
+    return rgb.map(function(c) {
+      c /= 255;
+      return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+    }).reduce(function(sum, c, i) { return sum + c * [0.2126, 0.7152, 0.0722][i]; }, 0);
+  }
+
+  function contrastRatio(c1, c2) {
+    var rgb1 = parseRGB(c1), rgb2 = parseRGB(c2);
+    if (!rgb1 || !rgb2) return 21;
+    var l1 = luminance(rgb1), l2 = luminance(rgb2);
+    return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+  }
+
+  // contextSelector (optional): when provided, only flag text inside matching UI containers.
+  // This ensures we detect design patterns — not informational text about design patterns.
+  function scanText(pattern, category, type, severity, msgPrefix, recommendation, confidence, contextSelector) {
+    var SKIP = {SCRIPT:1,STYLE:1,NOSCRIPT:1,TEXTAREA:1,CODE:1,PRE:1,SVG:1};
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    var seen = [];
+    while (walker.nextNode()) {
+      var node = walker.currentNode;
+      var el = node.parentElement;
+      if (!el || SKIP[el.tagName] || el.closest('script,style,noscript,textarea,code,pre')) continue;
+
+      // Skip sections explicitly marked as reference/informational content
+      if (el.closest('[data-ds-ignore]')) continue;
+
+      // Skip documentation-style containers (lists, glossaries, reference grids)
+      if (el.closest('[class*="check-list"],[class*="pattern-list"],[class*="feature-list"],[class*="glossary"],[class*="legend"],[class*="dp-cat"],[class*="dp-list"],[class*="check-block"],[class*="heuristic"],[class*="cat-label"]')) continue;
+
+      // Skip <li> items in "Term — definition" format (badge + em-dash = documentation entry)
+      var li = el.closest('li');
+      if (li && li.querySelector('[class*="tag"],[class*="badge"],[class*="chip"]') && /[—–]/.test(li.textContent)) continue;
+
+      // Context gate: only flag if the text lives inside an active UI component.
+      // This prevents flagging descriptive page copy that merely mentions a pattern by name.
+      if (contextSelector && !el.closest(contextSelector)) continue;
+
+      var text = node.textContent.trim();
+      if (!text || !pattern.test(text)) continue;
+      if (seen.indexOf(el) !== -1) continue;
+      seen.push(el);
+      var m = text.match(pattern);
+      var snippet = m ? '"' + m[0].trim().substring(0, 60) + '"' : '"' + text.substring(0, 60) + '"';
+      addIssue(category, type, severity, el, msgPrefix + ': ' + snippet, recommendation, confidence);
+    }
+  }
+
+  function checkPreselection() {
+    document.querySelectorAll('input[type="checkbox"]:checked, input[type="radio"]:checked').forEach(function(el) {
+      var label = document.querySelector('label[for="' + el.id + '"]') || el.closest('label');
+      var text = label ? label.textContent.trim() : (el.name || '');
+      if (/newsletter|subscribe|offer|deal|promotion|marketing|opt.?in|updates?|consent/i.test(text)) {
+        addIssue('Deceptive Pattern', 'Preselection', 'High', el, 'Pre-checked opt-in: "' + text.substring(0, 60) + '"', 'Uncheck by default. Users must actively opt in to marketing or additional services.', 'high');
+      }
+    });
+  }
+
+  function checkSneaking() {
+    document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(el) {
+      var label = document.querySelector('label[for="' + el.id + '"]') || el.closest('label');
+      if (!label) return;
+      var text = label.textContent.trim();
+      if (/insurance|protection|warranty|add.?on|bundle|extra|donation|premium/i.test(text)) {
+        addIssue('Deceptive Pattern', 'Sneaking', 'Critical', el, 'Pre-checked paid add-on: "' + text.substring(0, 60) + '"', 'Never pre-check paid extras. Users must consciously choose to add them.', 'high');
+      }
+    });
+    scanText(/\*\s*(terms|conditions|apply|see|restrictions)|see\s+terms\s+for\s+details|conditions\s+apply/i, 'Deceptive Pattern', 'Sneaking', 'Medium', 'Material conditions buried in footnote asterisk', 'Disclose conditions upfront alongside the offer, not hidden behind asterisks.', 'high',
+      'form,[class*="offer"],[class*="promo"],[class*="deal"],[class*="price"],[class*="product"],[class*="checkout"],[class*="cart"],[class*="plan"],[class*="pricing"]');
+  }
+
+  function checkFakeUrgency() {
+    document.querySelectorAll('[class*="countdown"],[class*="timer"],[id*="countdown"],[id*="timer"]').forEach(function(el) {
+      addIssue('Deceptive Pattern', 'Fake Urgency', 'High', el, 'Countdown timer pressures users with an artificial time limit', 'Only use countdown timers for genuine, fixed-end deadlines. Fake timers are a deceptive pattern that erodes user trust.', 'high');
+    });
+    scanText(/limited.?time\s+offer|offer.?expires?|ends?.?soon|hurry|act\s+now|last\s+chance|today\s+only|\d+\s*(hours?|minutes?|mins?)\s*(left|remaining)/i, 'Deceptive Pattern', 'Fake Urgency', 'Medium', 'Urgency language in a live UI element', 'Verify this deadline is real. Fake urgency pressures users into rushed decisions. If genuine, state the exact end date/time clearly.', 'high',
+      'button,a,[role="button"],[role="dialog"],[role="alert"],[role="banner"],[class*="banner"],[class*="cta"],[class*="offer"],[class*="promo"],[class*="deal"],[class*="sale"],[class*="checkout"],[class*="cart"],[class*="timer"],[class*="countdown"],[class*="alert"],[class*="notification"],[class*="toast"]');
+  }
+
+  function checkFakeScarcity() {
+    scanText(/only\s+\d+\s+(left|remaining|in\s+stock|available)|almost\s+gone|selling\s+fast|low\s+stock|limited\s+(stock|availability|supply|spots?)/i, 'Deceptive Pattern', 'Fake Scarcity', 'High', 'Scarcity claim on a product or inventory element', 'Ensure stock or availability claims reflect real data. Fabricated scarcity is a deceptive pattern. Only show live, accurate inventory counts.', 'high',
+      '[class*="product"],[class*="item"],[class*="stock"],[class*="inventory"],[class*="availability"],[class*="cart"],[class*="checkout"],[class*="price"],[class*="listing"],[class*="card"],[class*="shop"],[class*="store"]');
+  }
+
+  function checkConfirmshaming() {
+    scanText(/no,?\s*i\s+don.?t\s+want|i\s+don.?t\s+want\s+to\s+save|i\s+prefer\s+not\s+to|i\s+hate\s+saving|no,?\s*i\s+like\s+(paying|being|missing)/i, 'Deceptive Pattern', 'Confirmshaming', 'High', 'Confirmshaming: dismiss option uses guilt or shame', 'Replace shame-based dismiss text with a neutral option like "No thanks" or "Maybe later".', 'high',
+      'button,a,[role="button"],[role="dialog"],[role="alertdialog"],[class*="modal"],[class*="popup"],[class*="overlay"],[class*="dialog"],[class*="newsletter"],[class*="subscribe"],[class*="opt-"]');
+    document.querySelectorAll('button,[role="button"],a').forEach(function(el) {
+      var t = el.textContent.trim();
+      if (/i\s+don.?t\s+want|no\s+thanks,?\s+i\s+prefer|i\s+prefer\s+to\s+(miss|lose|stay\s+broke)/i.test(t)) {
+        addIssue('Deceptive Pattern', 'Confirmshaming', 'High', el, 'Shame-based button label: "' + t.substring(0, 60) + '" — emotionally manipulates users into accepting', 'Replace with a neutral decline label such as "No thanks" that respects user autonomy.', 'high');
+      }
+    });
+  }
+
+  function checkTrickWording() {
+    document.querySelectorAll('label, legend').forEach(function(el) {
+      var t = el.textContent;
+      if (/don.?t\s+not|uncheck\s+to\s+not|tick\s+if\s+you\s+don.?t|check\s+if\s+you\s+do\s+not/i.test(t)) {
+        addIssue('Deceptive Pattern', 'Trick Wording', 'Critical', el, 'Double-negative label misleads users into the wrong choice: "' + t.trim().substring(0, 80) + '"', 'Rewrite as a single, clear statement. Double negatives exploit confusion to trick users into unintended actions — a deceptive pattern.', 'high');
+      }
+    });
+    scanText(/free\*|free.{0,20}conditions?\s+apply|free.{0,30}then\s+\$|free.{0,30}after\s+trial/i, 'Deceptive Pattern', 'Trick Wording', 'Medium', '"Free" claim with hidden conditions in a pricing or offer element', 'State all conditions immediately alongside the word "Free". Burying them in footnotes misleads users about what they are agreeing to.', 'high',
+      '[class*="price"],[class*="plan"],[class*="pricing"],[class*="offer"],[class*="promo"],[class*="checkout"],[class*="cart"],[class*="product"],[class*="cta"],[class*="banner"]');
+  }
+
+  function checkHiddenCosts() {
+    scanText(/processing\s+fee|service\s+fee|booking\s+fee|convenience\s+fee|admin\s+fee|handling\s+fee|surcharge/i, 'Deceptive Pattern', 'Hidden Costs', 'Critical', 'Extra fee appearing in a checkout or order summary element', 'Disclose all fees upfront, before users invest time in the checkout process. Revealing charges at the last step exploits sunk-cost bias.', 'high',
+      'form,[class*="checkout"],[class*="cart"],[class*="order"],[class*="payment"],[class*="price"],[class*="total"],[class*="summary"],[class*="billing"],[class*="basket"]');
+  }
+
+  function checkHardToCancel() {
+    var signups = Array.from(document.querySelectorAll('button,a,[role="button"]')).filter(function(el) { return /sign.?up|get.?started|start.?free|subscribe|join.?now|create.?account/i.test(el.textContent); });
+    var cancels = Array.from(document.querySelectorAll('button,a,[role="button"]')).filter(function(el) { return /cancel|unsubscribe|delete.?account|close.?account|end\s+subscription/i.test(el.textContent); });
+    if (signups.length > 0 && cancels.length === 0) {
+      addIssue('Deceptive Pattern', 'Hard to Cancel', 'High', signups[0], 'Sign-up is easy but no visible way to cancel or unsubscribe on this page', 'Cancellation must be as easy to find as sign-up. Not providing a clear cancel path is a deceptive pattern — it traps users in subscriptions they no longer want.', 'medium');
+    }
+  }
+
+  function checkHiddenSubscription() {
+    document.querySelectorAll('[class*="price"],[class*="plan"],[class*="billing"],[class*="cost"]').forEach(function(el) {
+      var hasPrice = /\$[\d,.]+|£[\d,.]+|€[\d,.]+/.test(el.textContent);
+      var hasBillingPeriod = /per\s+(month|year|week|mo|yr|day)|monthly|annually|recurring|auto.?renew/i.test(el.textContent);
+      if (hasPrice && !hasBillingPeriod) {
+        addIssue('Deceptive Pattern', 'Hidden Subscription', 'Medium', el, 'Price displayed without disclosing the billing period or recurring charge', 'Always show the billing frequency (e.g. "£9/month") directly next to the price. Hiding recurring charges enrolls users in payments they did not knowingly agree to.', 'medium');
+      }
+    });
+  }
+
+  function checkNagging() {
+    // Collect visible modal-like elements, then deduplicate nested matches so that
+    // a single modal (backdrop + inner container) counts as ONE, not two.
+    var candidates = Array.from(document.querySelectorAll('[role="dialog"],[class*="modal"],[class*="popup"],[class*="overlay"],[class*="lightbox"]'))
+      .filter(function(el) {
+        if (el.getAttribute('aria-hidden') === 'true') return false;
+        var s = window.getComputedStyle(el);
+        if (s.display === 'none' || s.visibility === 'hidden' || parseFloat(s.opacity) === 0) return false;
+        var rect = el.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0;
+      });
+    // Keep only outermost elements — drop descendants of other matched elements.
+    var visibleModals = candidates.filter(function(el) {
+      return !candidates.some(function(other) { return other !== el && other.contains(el); });
+    });
+    if (visibleModals.length > 1) {
+      addIssue('Deceptive Pattern', 'Nagging', 'Medium', visibleModals[0], visibleModals.length + ' separate popups or dialogs are interrupting the user at the same time', 'Show only one dialog at a time. Stacking interruptions is a nagging pattern — it stops users from completing their task and damages trust. Always provide a clear, permanent dismiss option.', 'high');
+    }
+    var fixed = Array.from(document.querySelectorAll('*')).filter(function(el) {
+      if (el === document.body || el === document.documentElement) return false;
+      var s = window.getComputedStyle(el);
+      return s.position === 'fixed' || s.position === 'sticky';
+    });
+    if (fixed.length > 4) {
+      addIssue('Deceptive Pattern', 'Nagging', 'Low', fixed[0], fixed.length + ' fixed or sticky elements compete for the user\'s attention simultaneously', 'Audit all persistent UI. A cookie banner, live chat widget, newsletter bar, and sticky header all at once overwhelm the user and prevent them from focusing on their task.', 'medium');
+    }
+  }
+
+  function checkVisualInterference() {
+    document.querySelectorAll('[class*="close"],[aria-label*="close"],[aria-label*="Close"],[aria-label*="dismiss"]').forEach(function(el) {
+      var s = window.getComputedStyle(el);
+      if (parseFloat(s.fontSize) < 10 || parseFloat(s.opacity) < 0.4) {
+        addIssue('Deceptive Pattern', 'Visual Interference', 'High', el, 'Close or dismiss button is visually obscured (size: ' + s.fontSize + ', opacity: ' + s.opacity + ') — users cannot easily exit this element', 'Make close buttons clearly visible: minimum 16px font size, full opacity, sufficient contrast. Hiding the exit is visual interference — it traps users inside an overlay or dialog against their will.', 'high');
+      }
+    });
+    document.querySelectorAll('a[href]').forEach(function(el) {
+      if (/unsubscribe|cancel|opt.?out|remove\s+me/i.test(el.textContent)) {
+        var s = window.getComputedStyle(el);
+        if (parseFloat(s.fontSize) < 11) {
+          addIssue('Deceptive Pattern', 'Visual Interference', 'High', el, 'Opt-out link is tiny (' + s.fontSize + ') — far less visible than the opt-in action', 'Opt-out actions must be given the same visual prominence as opt-in actions. Making exit paths invisible is visual interference — a deceptive pattern.', 'high');
+        }
+      }
+    });
+  }
+
+  function checkObstruction() {
+    document.querySelectorAll('[class*="captcha"],[id*="captcha"],iframe[src*="recaptcha"]').forEach(function(el) {
+      var form = el.closest('form');
+      if (form && /contact|feedback|newsletter|comment/i.test(form.className + form.id)) {
+        addIssue('Deceptive Pattern', 'Obstruction', 'Low', el, 'CAPTCHA on a low-risk form creates unnecessary barriers that frustrate users', 'Use honeypot fields or server-side rate-limiting instead. Obstruction means making it harder for users to complete tasks than it needs to be — reserve CAPTCHA for genuinely high-risk actions like account creation or payments.', 'medium');
+      }
+    });
+  }
+
+  function checkDisguisedAds() {
+    document.querySelectorAll('[class*="sponsored"],[class*="ad-"],[class*="-ad"],[data-ad]').forEach(function(el) {
+      var hasLabel = el.querySelector('[class*="label"],[class*="badge"],[aria-label]') || /sponsored|advertisement|\bad\b/i.test(el.textContent.substring(0, 30));
+      if (!hasLabel) {
+        addIssue('Deceptive Pattern', 'Disguised Ads', 'Medium', el, 'Ad/sponsored element lacks a clear label', 'Label all paid content clearly as "Ad" or "Sponsored".', 'medium');
+      }
+    });
+    document.querySelectorAll('a[href*="click"],a[href*="track"],a[href*="/ad/"]').forEach(function(el) {
+      if (/continue|skip|next|download|free/i.test(el.textContent)) {
+        addIssue('Deceptive Pattern', 'Disguised Ads', 'High', el, '"' + el.textContent.trim() + '" links to tracking URL — may be disguised ad', 'Never style ads as primary navigation. Label them distinctly.', 'medium');
+      }
+    });
+  }
+
+  function checkFakeSocialProof() {
+    document.querySelectorAll('[class*="review"],[class*="testimonial"],[class*="rating"]').forEach(function(el) {
+      var hasVerified = /verified|purchase|confirmed|source/i.test(el.textContent);
+      var hasDate = /\d{4}|\d+\s+(days?|weeks?|months?)\s+ago/i.test(el.textContent);
+      if (!hasVerified && !hasDate) {
+        addIssue('Deceptive Pattern', 'Fake Social Proof', 'Medium', el, 'Review or testimonial lacks verification status and date', 'Add verified purchase badge and timestamp to all reviews.', 'medium');
+      }
+    });
+    scanText(/\b(10,?000|100,?000|1,?000,?000)\+?\s+(users?|customers?|members?|people|downloads?)/i, 'Deceptive Pattern', 'Fake Social Proof', 'Low', 'Suspiciously round social proof number in a marketing element', 'Use real tracked numbers. Perfect round numbers signal fabrication.', 'medium',
+      '[class*="hero"],[class*="banner"],[class*="testimonial"],[class*="review"],[class*="trust"],[class*="social"],[class*="proof"],[class*="stat"],[class*="counter"],[class*="metric"],[class*="cta"]');
+  }
+
+  function checkComparisonPrevention() {
+    document.querySelectorAll('[class*="pricing"],table').forEach(function(el) {
+      if (el.querySelectorAll('li,td').length > 12) {
+        addIssue('Deceptive Pattern', 'Comparison Prevention', 'Low', el, 'Complex pricing table — verify features are named consistently across all plans', 'Use identical feature names across tiers. Renaming per plan obscures comparison.', 'low');
+      }
+    });
+  }
+
+  function checkCurrencyConfusion() {
+    // All virtual currency words now require a number prefix (e.g. "500 coins", "100 tokens")
+    // to avoid false positives on common English words:
+    //   "design tokens", "hidden gem", "coin a phrase", "photo credits", "bullet points"
+    // V-Bucks is a proprietary brand name — always flag it regardless of number.
+    scanText(/\b\d[\d,]*\s*(coins?|tokens?|gems?|credits?|points?)\b|\bv.?bucks?\b/i, 'Deceptive Pattern', 'Currency Confusion', 'High', 'Virtual currency in a store or purchase element — real cost is unclear', 'Always show real-money equivalent alongside virtual currency. Never hide the actual spend.', 'high',
+      '[class*="store"],[class*="shop"],[class*="product"],[class*="item"],[class*="purchase"],[class*="buy"],[class*="cart"],[class*="price"],[class*="reward"],[class*="game"],[class*="inventory"],[class*="market"]');
+  }
+
+  function checkAddictiveDesign() {
+    var infiniteEl = document.querySelector('[class*="infinite"],[class*="endless"],[data-infinite]');
+    if (infiniteEl) {
+      addIssue('Deceptive Pattern', 'Addictive Design', 'Medium', infiniteEl, 'Infinite scroll pattern detected', 'Offer pagination as an alternative. Let users control where content ends.', 'high');
+    }
+    document.querySelectorAll('video[autoplay],audio[autoplay]').forEach(function(el) {
+      addIssue('Deceptive Pattern', 'Addictive Design', 'Medium', el, 'Autoplay ' + el.tagName.toLowerCase() + ' without user consent', 'Default media to paused. Autoplay is disruptive and jarring.', 'high');
+    });
+    scanText(/enable\s+notifications?|allow\s+notifications?|don.?t\s+miss\s+(out|updates?)/i, 'Deceptive Pattern', 'Addictive Design', 'Low', 'Notification push prompt in a dialog or permission UI', 'Request notification permission only after user has experienced clear value.', 'high',
+      'button,a,[role="button"],[role="dialog"],[role="alertdialog"],[class*="modal"],[class*="popup"],[class*="permission"],[class*="notification"],[class*="prompt"],[class*="banner"]');
+  }
+
+  function checkForcedAction() {
+    var socialCount = document.querySelectorAll('[class*="social-login"],[class*="oauth"],[href*="accounts.google"],[href*="facebook.com/login"]').length;
+    // Only flag if this is clearly an auth page: social buttons inside a form, or a password field exists.
+    // Prevents false positives on landing/content pages that have no login UI at all.
+    var hasAuthContext = document.querySelector('input[type="password"]')
+      || document.querySelector('form [class*="social-login"],form [class*="oauth"]');
+    var hasEmailInput = document.querySelector('input[type="email"]');
+    if (socialCount > 0 && hasAuthContext && !hasEmailInput) {
+      addIssue('Deceptive Pattern', 'Forced Action', 'High', document.body, 'Only social login available — no email/password alternative', 'Always offer email signup. Mandatory social login forces unwanted data sharing.', 'medium');
+    }
+    document.querySelectorAll('input[type="tel"]').forEach(function(el) {
+      if (el.required) {
+        addIssue('Deceptive Pattern', 'Forced Action', 'Medium', el, 'Phone number is a required field', 'Make phone optional unless the service genuinely requires it.', 'high');
+      }
+    });
+  }
+
+  function checkH1() {
+    document.querySelectorAll('form').forEach(function(form) {
+      var submit = form.querySelector('[type="submit"],button:not([type="button"]):not([type="reset"])');
+      if (!submit) return;
+      var hasLoader = form.querySelector('[class*="spinner"],[class*="loading"],[class*="loader"]') || submit.dataset.loading !== undefined || submit.getAttribute('aria-busy');
+      if (!hasLoader) {
+        addIssue('Nielsen Heuristic', 'H1: System Status', 'Medium', submit, 'Submit button has no visible loading/processing state', 'Disable the button and show a spinner or "Processing..." label on submit.', 'high');
+      }
+    });
+    var hasMultiStep = document.querySelectorAll('[class*="step"],[data-step],[class*="wizard"]').length > 1;
+    var hasProgress = document.querySelector('[class*="progress"],[role="progressbar"],[aria-valuenow]');
+    if (hasMultiStep && !hasProgress) {
+      addIssue('Nielsen Heuristic', 'H1: System Status', 'High', document.body, 'Multi-step flow detected but no progress indicator found', 'Add a step counter ("Step 1 of 3") or progress bar.', 'medium');
+    }
+  }
+
+  function checkH2() {
+    var jargonPattern = /\b(api|sdk|payload|endpoint|webhook|cron|regex|boolean|null|undefined|404|500|401|403|422|503)\b/gi;
+    document.querySelectorAll('p,h1,h2,h3,h4,h5,h6,label,button,a,li,td,span').forEach(function(el) {
+      if (el.children.length > 0) return;
+      var text = el.textContent.trim();
+      var matches = text.match(jargonPattern);
+      if (matches) {
+        addIssue('Nielsen Heuristic', 'H2: Real World Match', 'Low', el, 'Technical jargon in UI copy: "' + matches.slice(0, 3).join('", "') + '"', 'Replace technical terms with plain language your users already know.', 'best-effort');
+      }
+    });
+  }
+
+  function checkH3() {
+    document.querySelectorAll('button,[role="button"],a').forEach(function(el) {
+      if (/\b(delete|remove|clear\s+all|reset|destroy|purge|wipe)\b/i.test(el.textContent)) {
+        var onclick = el.getAttribute('onclick') || '';
+        var hasConfirm = onclick.indexOf('confirm') !== -1 || el.dataset.confirm || el.dataset.modal || el.closest('[role="dialog"]');
+        if (!hasConfirm) {
+          addIssue('Nielsen Heuristic', 'H3: User Control', 'High', el, 'Destructive action "' + el.textContent.trim() + '" has no confirmation', 'Show a confirmation dialog that names exactly what will be permanently lost.', 'high');
+        }
+      }
+    });
+    document.querySelectorAll('form').forEach(function(form) {
+      var hasSubmit = form.querySelector('[type="submit"]');
+      var hasEscape = form.querySelector('a,button[type="button"]');
+      if (hasSubmit && !hasEscape) {
+        addIssue('Nielsen Heuristic', 'H3: User Control', 'Low', form, 'Form has a submit but no cancel or back option', 'Always give users an exit path so they can abandon without committing.', 'high');
+      }
+    });
+  }
+
+  function checkH4() {
+    var prevLevel = 0, headingSkipped = false;
+    document.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(function(h) {
+      var lvl = +h.tagName[1];
+      if (prevLevel > 0 && lvl > prevLevel + 1) headingSkipped = true;
+      prevLevel = lvl;
+    });
+    if (headingSkipped) {
+      addIssue('Nielsen Heuristic', 'H4: Consistency', 'Medium', document.body, 'Heading levels are skipped (e.g. H1 to H3)', 'Use sequential heading levels. Skipping levels breaks screen reader navigation.', 'high');
+    }
+    var h1s = document.querySelectorAll('h1');
+    if (h1s.length > 1) {
+      addIssue('Nielsen Heuristic', 'H4: Consistency', 'Medium', h1s[1], h1s.length + ' H1 elements on page — only one should exist', 'Use a single H1 as the primary page title. Use H2-H6 for sections.', 'high');
+    }
+    var buttons = document.querySelectorAll('button,[role="button"]');
+    var buttonStyles = [];
+    buttons.forEach(function(btn) {
+      var s = window.getComputedStyle(btn);
+      var key = s.borderRadius + '|' + s.fontFamily;
+      if (buttonStyles.indexOf(key) === -1) buttonStyles.push(key);
+    });
+    if (buttonStyles.length > 4 && buttons.length > 6) {
+      addIssue('Nielsen Heuristic', 'H4: Consistency', 'Low', buttons[0], buttonStyles.length + ' distinct button style variants detected', 'Standardise button styles using a design system.', 'medium');
+    }
+  }
+
+  function checkH5() {
+    document.querySelectorAll('input,textarea,select').forEach(function(el) {
+      if (el.type === 'text' && /email/i.test(el.name + el.id + (el.placeholder || ''))) {
+        addIssue('Nielsen Heuristic', 'H5: Error Prevention', 'Medium', el, 'Email field uses type="text" instead of type="email"', 'Switch to type="email" for format validation and the right mobile keyboard.', 'high');
+      }
+      if (el.required) {
+        var label = document.querySelector('label[for="' + el.id + '"]') || el.closest('label');
+        if (label && !/\*|required/i.test(label.textContent)) {
+          addIssue('Nielsen Heuristic', 'H5: Error Prevention', 'Medium', el, 'Required field has no visual indicator (* or "Required")', 'Mark required fields with * and explain the convention at the top of the form.', 'high');
+        }
+      }
+      if (el.type === 'password') {
+        var parent = el.closest('div,fieldset') || el.parentElement;
+        var hasToggle = parent && (/show|hide|reveal/i.test(parent.textContent) || parent.querySelector('[class*="toggle"],[type="checkbox"]'));
+        if (!hasToggle) {
+          addIssue('Nielsen Heuristic', 'H5: Error Prevention', 'Low', el, 'Password field has no show/hide toggle', 'Add a show/hide toggle to reduce typos, especially on mobile.', 'high');
+        }
+      }
+    });
+  }
+
+  function checkH6() {
+    document.querySelectorAll('button,[role="button"]').forEach(function(el) {
+      var hasText = el.textContent.trim().length > 0;
+      var hasLabel = el.getAttribute('aria-label') || el.getAttribute('title');
+      var hasIcon = el.querySelector('svg,img,i,[class*="icon"]');
+      if (hasIcon && !hasText && !hasLabel) {
+        addIssue('Nielsen Heuristic', 'H6: Recognition', 'High', el, 'Icon-only button with no accessible label (missing aria-label or title)', 'Add aria-label to every icon-only button. Icons alone are ambiguous.', 'high');
+      }
+    });
+    var depth = window.location.pathname.split('/').filter(Boolean).length;
+    if (depth > 2 && !document.querySelector('[aria-label*="breadcrumb"],[class*="breadcrumb"]')) {
+      addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', document.body, 'Deep page URL but no breadcrumb navigation found', 'Add breadcrumbs on deep pages so users know where they are.', 'medium');
+    }
+  }
+
+  function checkH7() {
+    var skipLink = document.querySelector('a[href="#main"],a[href="#content"],a[href="#maincontent"],a[href="#main-content"],[class*="skip-"]');
+    if (!skipLink) {
+      addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Medium', document.body, 'No skip-to-content link found', 'Add a visually hidden "Skip to main content" as the first focusable element.', 'high');
+    }
+    var longList = document.querySelectorAll('li,tr,[class*="card"],[class*="item"]').length > 20;
+    var hasSearch = document.querySelector('[type="search"],[role="search"],[class*="search-input"]');
+    if (longList && !hasSearch) {
+      addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Low', document.body, 'Long list/grid with no search or filter control', 'Add search or filter to help power users find items quickly.', 'best-effort');
+    }
+  }
+
+  function checkH8() {
+    var lowContrastCount = 0;
+    var reported = [];
+    document.querySelectorAll('p,span,label,a,button,h1,h2,h3,h4,h5,h6,li,td').forEach(function(el) {
+      if (el.children.length > 0 || reported.indexOf(el) !== -1) return;
+      var s = window.getComputedStyle(el);
+      var ratio = contrastRatio(s.color, s.backgroundColor);
+      var isLargeText = parseFloat(s.fontSize) >= 18 || (parseFloat(s.fontSize) >= 14 && +s.fontWeight >= 700);
+      var minRatio = isLargeText ? 3 : 4.5;
+      if (ratio < minRatio) {
+        lowContrastCount++;
+        reported.push(el);
+        if (lowContrastCount <= 5) {
+          addIssue('Nielsen Heuristic', 'H8: Aesthetics', ratio < 2 ? 'Critical' : 'High', el, 'Contrast ratio ' + ratio.toFixed(1) + ':1 (WCAG AA minimum ' + minRatio + ':1)', 'Increase contrast. Text: ' + s.color + ' on ' + s.backgroundColor, 'high');
+        }
+      }
+    });
+    if (lowContrastCount > 5) {
+      addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'High', document.body, lowContrastCount + ' total low-contrast text elements (showing first 5 above)', 'Run a full WCAG AA contrast audit across all text in this design.', 'high');
+    }
+    var fontSizes = [];
+    document.querySelectorAll('*').forEach(function(el) {
+      if (!el.children.length) { var sz = window.getComputedStyle(el).fontSize; if (fontSizes.indexOf(sz) === -1) fontSizes.push(sz); }
+    });
+    if (fontSizes.length > 8) {
+      addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'Low', document.body, fontSizes.length + ' distinct font sizes in use', 'Limit to 4-6 type scale steps. Too many sizes signal no consistent design system.', 'high');
+    }
+  }
+
+  function checkH9() {
+    document.querySelectorAll('[class*="error"],[class*="alert"],[role="alert"],[aria-live]').forEach(function(el) {
+      if (/something\s+went\s+wrong|an?\s+error\s+(has\s+)?occurred|oops|try\s+again\s+later/i.test(el.textContent)) {
+        addIssue('Nielsen Heuristic', 'H9: Error Recovery', 'High', el, 'Generic error message: "' + el.textContent.trim().substring(0, 60) + '"', 'Explain what failed specifically and tell the user exactly what to do next.', 'best-effort');
+      }
+      var isLinkedToField = el.id && document.querySelector('[aria-describedby="' + el.id + '"]');
+      var isInlineWithField = el.closest('label,fieldset,[class*="field"],[class*="form-group"]');
+      if (!isLinkedToField && !isInlineWithField) {
+        addIssue('Nielsen Heuristic', 'H9: Error Recovery', 'Medium', el, 'Error element not associated with a specific input field', 'Use aria-describedby to link errors to fields. Place errors adjacent to the failing input.', 'medium');
+      }
+    });
+  }
+
+  function checkH10() {
+    document.querySelectorAll('input[type="password"]').forEach(function(el) {
+      var parent = el.closest('div,fieldset') || el.parentElement;
+      var hasHint = parent && /character|uppercase|lowercase|number|special|length|least|minimum/i.test(parent.textContent);
+      if (!hasHint) {
+        addIssue('Nielsen Heuristic', 'H10: Help', 'Medium', el, 'Password field shows no requirements hint', 'Display password rules before the user submits. Never wait for failure.', 'high');
+      }
+    });
+    ['[class*="empty-state"]','[class*="no-data"]','[class*="zero-state"]','[class*="no-results"]'].forEach(function(sel) {
+      document.querySelectorAll(sel).forEach(function(el) {
+        var hasAction = el.querySelector('button,a');
+        var hasCopy = el.textContent.trim().length > 20;
+        if (!hasAction || !hasCopy) {
+          addIssue('Nielsen Heuristic', 'H10: Help', 'Medium', el, 'Empty state lacks descriptive copy or a next-step action', 'Empty states should explain why and offer a clear CTA.', 'best-effort');
+        }
+      });
+    });
+  }
+
+  function runAnalysis() {
+    checkPreselection(); checkSneaking(); checkFakeUrgency(); checkFakeScarcity();
+    checkConfirmshaming(); checkTrickWording(); checkHiddenCosts(); checkHardToCancel();
+    checkHiddenSubscription(); checkNagging(); checkVisualInterference(); checkObstruction();
+    checkDisguisedAds(); checkFakeSocialProof(); checkComparisonPrevention();
+    checkCurrencyConfusion(); checkAddictiveDesign(); checkForcedAction();
+    checkH1(); checkH2(); checkH3(); checkH4(); checkH5();
+    checkH6(); checkH7(); checkH8(); checkH9(); checkH10();
+  }
+
+  function sevColor(s) {
+    return {Critical:'#dc2626',High:'#ea580c',Medium:'#d97706',Low:'#65a30d'}[s]||'#6b7280';
+  }
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderPanel() {
+    var host = document.createElement('div');
+    host.id = PANEL_ID;
+    host.style.cssText = 'all:initial;position:fixed;top:0;right:0;z-index:2147483647;width:440px;height:100vh;pointer-events:none';
+    document.body.appendChild(host);
+    var shadow = host.attachShadow({mode:'closed'});
+
+    var counts = {Critical:0,High:0,Medium:0,Low:0};
+    issues.forEach(function(i){counts[i.severity]=(counts[i.severity]||0)+1;});
+    var total = issues.length;
+    var deceptive = issues.filter(function(i){return i.category==='Deceptive Pattern';});
+    var heuristics = issues.filter(function(i){return i.category==='Nielsen Heuristic';});
+
+    var panel = document.createElement('div');
+    panel.style.cssText = 'all:initial;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:13px;line-height:1.5;color:#1f2937;background:#fff;width:440px;height:100vh;box-shadow:-4px 0 28px rgba(0,0,0,.18);display:flex;flex-direction:column;pointer-events:all;overflow:hidden';
+
+    var badgeHtml = Object.keys(counts).filter(function(k){return counts[k]>0;}).map(function(k){
+      return '<span class="badge" style="background:'+sevColor(k)+'">'+counts[k]+' '+esc(k)+'</span>';
+    }).join('');
+    if(total===0) badgeHtml='<span class="badge" style="background:#16a34a">No issues found</span>';
+
+    panel.innerHTML = '<style>*{box-sizing:border-box;margin:0;padding:0}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:2px}.hd{background:#0f172a;color:#fff;padding:14px 16px;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}.hd-t{font-size:14px;font-weight:700}.hd-s{font-size:11px;color:#94a3b8;margin-top:2px}.cls{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:20px;padding:0 4px;line-height:1;border-radius:4px}.cls:hover{color:#fff;background:#1e293b}.min{background:none;border:none;color:#94a3b8;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;border-radius:4px;margin-right:2px}.min:hover{color:#fff;background:#1e293b}.sum{padding:10px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;flex-shrink:0}.sum-hd{font-size:12px;font-weight:700;color:#1f2937;margin-bottom:8px}.bgs{display:flex;gap:6px;flex-wrap:wrap}.badge{display:inline-flex;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;color:#fff}.tabs{display:flex;border-bottom:1px solid #e2e8f0;background:#fff;flex-shrink:0}.tab{flex:1;padding:9px 4px;font-size:11px;font-weight:500;border:none;background:none;cursor:pointer;color:#6b7280;border-bottom:2px solid transparent}.tab:hover{color:#0f172a}.tab.on{color:#0f172a;border-bottom-color:#6366f1;font-weight:700}.list{flex:1;overflow-y:auto;padding:8px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer}.card:hover{border-color:#a5b4fc}.card.open{border-color:#6366f1;background:#fafafe}.ct{display:flex;align-items:flex-start;gap:8px}.dot{width:8px;min-width:8px;height:8px;border-radius:50%;margin-top:4px}.ci{font-size:12px;font-weight:600;color:#1f2937;flex:1}.cm2{font-size:10px;color:#6b7280;margin-top:1px}.cb2{display:none;margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9}.card.open .cb2{display:block}.msg{font-size:11px;color:#374151;margin-bottom:6px;word-break:break-word}.rec{font-size:11px;color:#065f46;background:#ecfdf5;border-left:3px solid #10b981;padding:6px 8px;border-radius:0 4px 4px 0;margin-bottom:6px}.fr{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.conf{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}.ch{background:#dcfce7;color:#15803d}.cm3{background:#e0f2fe;color:#0369a1}.cbe{background:#fef9c3;color:#854d0e}.jmp{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;color:#374151;cursor:pointer;margin-left:auto}.jmp:hover{background:#6366f1;color:#fff;border-color:#6366f1}.empty{text-align:center;padding:40px 20px;color:#6b7280}.ei{font-size:36px;margin-bottom:8px}.footer{padding:10px 16px;border-top:1px solid #e2e8f0;flex-shrink:0}.exp{width:100%;padding:7px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:11px;cursor:pointer;color:#374151;margin-bottom:6px}.exp:hover{background:#0f172a;color:#fff;border-color:#0f172a}.prv{font-size:10px;color:#9ca3af;text-align:center}</style>'
+      +'<div class="hd"><div><div class="hd-t">designSense</div><div class="hd-s">18 dark patterns · Nielsen\'s 10 heuristics</div></div><div style="display:flex;gap:0;align-items:center"><button class="min" id="dv-min" title="Minimize" aria-label="Minimize"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="12" height="12" rx="3"/><line x1="4" y1="9.5" x2="10" y2="9.5"/></svg></button><button class="cls" id="dv-close" aria-label="Close">&#x2715;</button></div></div>'
+      +'<div class="sum"><div class="sum-hd">'+total+' violation'+(total!==1?'s':'')+' found</div><div class="bgs">'+badgeHtml+'</div></div>'
+      +'<div class="tabs"><button class="tab on" data-tab="all">All ('+total+')</button><button class="tab" data-tab="deceptive">Dark Patterns ('+deceptive.length+')</button><button class="tab" data-tab="heuristic">Heuristics ('+heuristics.length+')</button></div>'
+      +'<div class="list" id="dv-list"></div>'
+      +'<div class="footer"><button class="exp" id="dv-export">Copy full report as JSON</button><div class="prv">No data leaves your browser &middot; Shadow DOM isolated &middot; Read-only</div></div>';
+
+    shadow.appendChild(panel);
+
+    var activeTab='all', highlightedEl=null;
+
+    function getFiltered(tab) {
+      return tab==='deceptive'?deceptive:tab==='heuristic'?heuristics:issues;
+    }
+
+    function renderList(tab) {
+      var listEl=shadow.getElementById('dv-list');
+      var filtered=getFiltered(tab);
+      if(!filtered.length){
+        listEl.innerHTML='<div class="empty"><div class="ei">&#10003;</div><strong>No issues in this category</strong><p style="margin-top:6px;font-size:11px">This section looks clean!</p></div>';
+        return;
+      }
+      listEl.innerHTML=filtered.map(function(issue,i){
+        var cc=issue.confidence==='high'?'ch':issue.confidence==='best-effort'?'cbe':'cm3';
+        var cl=issue.confidence==='high'?'&#10003; High confidence':issue.confidence==='best-effort'?'&#9888; Best effort':'~ Medium confidence';
+        var rect=issue.el?issue.el.getBoundingClientRect():null;
+        var canJump=issue.el&&issue.el!==document.body&&rect&&(rect.width>0||rect.height>0);
+        return '<div class="card" data-i="'+i+'" data-tab="'+tab+'">'
+          +'<div class="ct"><div class="dot" style="background:'+sevColor(issue.severity)+'"></div>'
+          +'<div style="flex:1"><div class="ci">'+esc(issue.type)+'</div><div class="cm2">'+esc(issue.category)+' &middot; '+esc(issue.severity)+'</div></div></div>'
+          +'<div class="cb2"><div class="msg">'+esc(issue.message)+'</div><div class="rec">Fix: '+esc(issue.recommendation)+'</div>'
+          +'<div class="fr"><span class="conf '+cc+'">'+cl+'</span>'
+          +(canJump?'<button class="jmp" data-jump="'+i+'" data-tab="'+tab+'">&#8599; Jump to element</button>':'')
+          +'</div></div></div>';
+      }).join('');
+    }
+
+    shadow.querySelectorAll('.tab').forEach(function(tab){
+      tab.addEventListener('click',function(){
+        shadow.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+        tab.classList.add('on');
+        activeTab=tab.dataset.tab;
+        renderList(activeTab);
+      });
+    });
+
+    shadow.getElementById('dv-list').addEventListener('click',function(e){
+      var jumpBtn=e.target.closest('[data-jump]');
+      if(jumpBtn){
+        e.stopPropagation();
+        var idx=+jumpBtn.dataset.jump;
+        var issue=getFiltered(jumpBtn.dataset.tab)[idx];
+        if(issue&&issue.el){
+          if(highlightedEl){highlightedEl.style.outline='';highlightedEl.style.outlineOffset='';}
+          highlightedEl=issue.el;
+          issue.el.style.outline='3px solid #6366f1';
+          issue.el.style.outlineOffset='2px';
+          issue.el.scrollIntoView({behavior:'smooth',block:'center'});
+          setTimeout(function(){if(highlightedEl===issue.el){issue.el.style.outline='';issue.el.style.outlineOffset='';}},3000);
+        }
+        return;
+      }
+      var card=e.target.closest('.card');
+      if(!card)return;
+      var isOpen=card.classList.contains('open');
+      shadow.querySelectorAll('.card.open').forEach(function(c){c.classList.remove('open');});
+      if(!isOpen)card.classList.add('open');
+    });
+
+    var dvMinimized=false;
+    shadow.getElementById('dv-min').addEventListener('click',function(){
+      dvMinimized=!dvMinimized;
+      var btn=shadow.getElementById('dv-min');
+      var secs=[shadow.querySelector('.sum'),shadow.querySelector('.tabs'),shadow.getElementById('dv-list'),shadow.querySelector('.footer')];
+      if(dvMinimized){
+        secs.forEach(function(el){if(el)el.style.display='none';});
+        panel.style.height='auto';
+        host.style.height='auto';
+        host.style.top='auto';
+        host.style.bottom='0';
+        btn.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="12" height="12" rx="3"/><line x1="4.5" y1="7" x2="9.5" y2="7"/><line x1="7" y1="4.5" x2="7" y2="9.5"/></svg>';
+        btn.title='Restore';btn.setAttribute('aria-label','Restore');
+      }else{
+        secs.forEach(function(el){if(el)el.style.display='';});
+        panel.style.height='100vh';
+        host.style.height='100vh';
+        host.style.bottom='auto';
+        host.style.top='0';
+        btn.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="12" height="12" rx="3"/><line x1="4" y1="9.5" x2="10" y2="9.5"/></svg>';
+        btn.title='Minimize';btn.setAttribute('aria-label','Minimize');
+      }
+    });
+
+    shadow.getElementById('dv-close').addEventListener('click',function(){
+      if(highlightedEl){highlightedEl.style.outline='';highlightedEl.style.outlineOffset='';}
+      host.remove();
+    });
+
+    shadow.getElementById('dv-export').addEventListener('click',function(){
+      var btn=shadow.getElementById('dv-export');
+      var report={url:location.href,timestamp:new Date().toISOString(),summary:counts,total:total,issues:issues.map(function(issue){
+        var elStr=issue.el===document.body?'document.body':issue.el?(issue.el.id?'#'+issue.el.id:issue.el.tagName.toLowerCase()+(issue.el.className?'.'+String(issue.el.className).trim().split(/\s+/).join('.'):'')):'unknown';
+        return {category:issue.category,type:issue.type,severity:issue.severity,message:issue.message,recommendation:issue.recommendation,confidence:issue.confidence,element:elStr};
+      })};
+      var json=JSON.stringify(report,null,2);
+      if(navigator.clipboard&&navigator.clipboard.writeText){
+        navigator.clipboard.writeText(json).then(function(){btn.textContent='Copied!';setTimeout(function(){btn.textContent='Copy full report as JSON';},2500);}).catch(function(){console.log('[designSense]\n'+json);btn.textContent='See browser console';});
+      } else {
+        console.log('[designSense]\n'+json);
+        btn.textContent='Logged to console';
+        setTimeout(function(){btn.textContent='Copy full report as JSON';},2500);
+      }
+    });
+
+    renderList('all');
+  }
+
+  runAnalysis();
+  renderPanel();
+})();</script>
+
+  <!-- ──────────────────────────────────────────────────────────
+       Bookmarklet loader — reads the embedded source above and
+       sets the drag button's href. No fetch, no server needed.
+       Works from file://, GitHub Pages, or any static host.
+       ────────────────────────────────────────────────────────── -->
+  <script>
+    (function () {
+      var src = document.getElementById('bm-src').textContent.trim();
+      var encoded = 'javascript:' + encodeURIComponent(src);
+      document.getElementById('bookmarklet-link').href = encoded;
+      document.getElementById('cta-bookmarklet-link').href = encoded;
+    })();
+  </script>
+
+</body>
+</html>
