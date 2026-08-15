@@ -22,7 +22,7 @@ Click designSense on any prototype and get an instant report covering:
 
 ## Install in 30 seconds
 
-1. Open [the designSense page](https://padmavathideviv.github.io/Designvalidator/)
+1. Open [the designSense page](https://design-sense.vercel.app)
 2. Drag the **designSense** button to your bookmarks bar
 3. Navigate to any HTML or React prototype
 4. Click the bookmark — an audit panel opens instantly
