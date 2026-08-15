@@ -57,7 +57,7 @@ body {
 }
 .site-header .container { display: flex; align-items: center; justify-content: space-between; }
 .logo { font-size: 14px; font-weight: 800; color: var(--ink); letter-spacing: -.01em; }
-.logo span { color: var(--accent); }
+.logo span { color: var(--accent-dk); }
 .nav { display: flex; gap: 28px; align-items: center; }
 .nav a { font-size: 13px; font-weight: 500; color: var(--ink-muted); text-decoration: none; transition: color .15s; }
 .nav a:hover { color: var(--ink); }
@@ -238,7 +238,7 @@ body {
 .heuristic-legend {
   margin-top: 14px; padding: 10px 14px;
   background: #f0fdf4; border: 1px solid #bbf7d0;
-  border-radius: 6px; font-size: 12px; color: #166534;
+  border-radius: 6px; font-size: 12px; color: var(--green-text);
 }
 
 /* ── Privacy ── */

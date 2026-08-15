@@ -20,7 +20,7 @@ It exists because AI-generated UI is fast to produce and frequently ships withou
 
 **Secondary:** QA engineers and developers doing a design review pass before handoff. They want a structured report, not an opinion.
 
-**Not for:** Security auditors, accessibility specialists (no ARIA deep-scan), or performance engineers. The tool's scope is intentionally narrow.
+**Not for:** Security auditors or performance engineers. Accessibility specialists get a real, dedicated category (13 checks, A1–A13 — contrast, labels, keyboard access, ARIA wiring, heading structure) but not a *complete* one: it's a fast structural pass, not a substitute for axe, Lighthouse, or a screen-reader walkthrough. The tool's scope is intentionally narrow.
 
 ---
 
@@ -53,7 +53,7 @@ designSense has two distinct surfaces that a user moves through in order.
 
 **Single CTA, immediate.** The bookmarklet button is the first actionable element after the headline. Everything else — stats, how-it-works, what-it-checks — exists to earn trust *after* the CTA, not before it. Users who already trust it can drag immediately without scrolling.
 
-**Stats strip as proof, not decoration.** The four-cell horizontal grid (27 dark patterns / 10 heuristics / 0 data shared / 0 backend needed) uses the same numeric boldness as a financial dashboard. The zeros for "Data Shared" and "Backend Needed" are the most important numbers on the page. They confirm the core constraint before the user reads a sentence of explanation.
+**Stats strip as proof, not decoration.** The five-cell horizontal grid (27 dark patterns / 10 heuristics / 13 accessibility checks / 0 data shared / 0 backend needed) uses the same numeric boldness as a financial dashboard. The zeros for "Data Shared" and "Backend Needed" are the most important numbers on the page. They confirm the core constraint before the user reads a sentence of explanation.
 
 **Eyebrow sets the context without polluting the headline.** "For AI-generated prototypes & designs" is set in small muted text above the H1. The H1 ("Catch dark patterns & usability issues before you ship.") carries the value proposition; the eyebrow narrows the audience without cluttering the primary message.
 
@@ -100,12 +100,30 @@ Source: De Souza & Avelar (2021). Categories: Urgency, Scarcity, Social Proof, N
 
 Each category maps to patterns that have observable DOM or text signatures. A countdown timer with `[class*="countdown"]` is reliable. A "limited time offer" string in a banner is reliable with context. A heading that says "Urgency" is not a pattern — it is a label.
 
-**Nielsen heuristics — 10 checks via DOM and CSS inspection**  
-Source: Nielsen Norman Group's 10 Usability Heuristics.
+**Nielsen heuristics — 10 principles via DOM and CSS inspection**  
+Source: Nielsen Norman Group's 10 Usability Heuristics. 
+
+| # | Heuristic | Definition (NN/g) |
+|---|---|---|
+| H1 | Visibility of System Status | Designs should keep users informed about what is going on, through appropriate, timely feedback. |
+| H2 | Match Between System and the Real World | The design should speak the users' language. Use words, phrases, and concepts familiar to the user, rather than internal jargon. |
+| H3 | User Control and Freedom | Users often perform actions by mistake. They need a clearly marked "emergency exit" to leave the unwanted action. |
+| H4 | Consistency and Standards | Users should not have to wonder whether different words, situations, or actions mean the same thing. Follow platform conventions. |
+| H5 | Error Prevention | Good error messages are important, but the best designs carefully prevent problems from occurring in the first place. |
+| H6 | Recognition Rather Than Recall | Minimize the user's memory load by making elements, actions, and options visible. Avoid making users remember information. |
+| H7 | Flexibility and Efficiency of Use | Shortcuts — hidden from novice users — may speed up the interaction for the expert user. |
+| H8 | Aesthetic and Minimalist Design | Interfaces should not contain information which is irrelevant. Every extra unit of information in an interface competes with the relevant units of information. |
+| H9 | Recognize, Diagnose, and Recover from Errors | Error messages should be expressed in plain language (no error codes), precisely indicate the problem, and constructively suggest a solution. |
+| H10 | Help and Documentation | It's best if the design doesn't need any additional explanation. However, it may be necessary to provide documentation to help users complete their tasks. |
+
+What *does* change is which sub-checks report under the Heuristics category versus a separate one. A sub-check that maps directly to a WCAG concern — contrast, labels, keyboard access, ARIA, heading structure — moved to a dedicated `Accessibility` category with its own `A1`–`A13` numbering, deliberately not H-numbers: these are cross-cutting WCAG concerns pulled from several different heuristics (H1, H4–H9), not sub-checks of any single one, so borrowing the H-series would misrepresent them as belonging to one heuristic. H8's checks (contrast, type scale, color palette) all moved this way, leaving H8 with no checks of its own under the Heuristics tab — its findings are still there, just under Accessibility as A9–A11.
 
 Heuristics are split by detection confidence:
-- **High confidence** — H1 (loading states), H3 (user control), H4 (heading hierarchy), H5 (error prevention), H6 (recognition), H8 (WCAG AA contrast) — reliable DOM and CSS queries
-- **Best effort** — H2 (real-world language), H7 (flexibility), H9 (error recovery), H10 (help) — text heuristics that require contextual judgement by the reviewer
+- **High confidence** — H1 (loading states), H3 (user control), H4 (button consistency), H5 (error prevention), H6 (breadcrumbs) — reliable DOM and CSS queries
+- **Best effort** — H2 (real-world language), H7 (search on long lists), H9 (error recovery), H10 (help) — text heuristics that require contextual judgement by the reviewer
+
+**Accessibility — 13 checks (A1–A13), WCAG-adjacent**  
+Not a Nielsen category — a cross-cutting one. Pulled together every sub-check across H1–H9 that maps to a concrete WCAG success criterion (contrast, labels, keyboard access, ARIA wiring, heading structure) so a reviewer scanning specifically for accessibility gaps has one tab, not ten scattered mentions.
 
 ### 5.2 When to Flag — The Context Gate
 
@@ -167,7 +185,7 @@ Severity colors (`--critical`, `--high`, `--medium`, `--low`) are used only in t
 
 **Auto-fill card grid** — used for dark pattern categories. `grid-template-columns: repeat(auto-fill, minmax(185px, 1fr))` — responsive without breakpoint management. Works equally at 320px and 1600px.
 
-**Two-column heuristic grid** — fixed two-column on desktop, single column on mobile. Each item is a labeled item with a badge and an em-dash definition format. The em-dash format is a deliberate pattern — it signals documentation, and the scanner uses the presence of badge + em-dash as a signal to skip list items.
+**Two-column heuristic grid** — fixed two-column on desktop, single column on mobile. Each item is a labeled item with a badge and an em-dash definition format. The em-dash format is a deliberate pattern — it signals documentation, and the scanner uses the presence of badge + em-dash as a signal to skip list items. The same `.heuristic-grid` markup renders both the Nielsen Heuristics block and the Accessibility block — one pattern, two check families, kept visually identical so neither reads as more or less important than the other.
 
 ### The Logo
 
@@ -175,7 +193,7 @@ Severity colors (`--critical`, `--high`, `--medium`, `--low`) are used only in t
 
 ### Severity Badges
 
-Five badge types: `.critical`, `.high`, `.medium`, `.low`, `.hc` (high-confidence heuristic), `.be` (best-effort heuristic). Pill shape (border-radius 10px), color-coded backgrounds at 20% opacity with fully saturated foreground text. The badge system is shared between the landing page's "What it checks" grid and the audit panel's issue cards — same semantic layer, two surfaces.
+Five badge types: `.critical`, `.high`, `.medium`, `.low`, `.hc` ("Reliable" — high or medium confidence, structural detection), `.be` ("Needs review" — best-effort, text-pattern heuristic). Pill shape (border-radius 10px), color-coded backgrounds at 20% opacity with fully saturated foreground text. The confidence badges are shared across all three "What it checks" blocks — Dark Patterns, Heuristics, and Accessibility — and the audit panel's issue cards use the same plain-language labels (`✓ Very likely a real issue`, `~ Probably a real issue`, `⚠ Worth double-checking`) rather than the raw confidence terms, since a reader scanning live findings shouldn't need to know what "best-effort" means as a detection-engine term.
 
 ---
 
@@ -198,7 +216,7 @@ The Privacy section on the landing page is intentionally placed last — after t
 
 Scoping constraints matter as much as scope:
 
-- **Not an accessibility auditor.** It checks WCAG AA contrast and some heuristics adjacent to accessibility, but it does not replace axe, Lighthouse, or a screen-reader pass.
+- **Not a complete accessibility auditor.** The Accessibility category (13 checks, A1–A13) covers real WCAG-adjacent ground — contrast, heading structure, keyboard access, labels, ARIA wiring — but it's a static DOM/CSS pass, not a replacement for axe, Lighthouse, or an actual screen-reader walkthrough. It can't test focus order, live announcement behavior, or anything that only shows up at runtime.
 - **Not a security scanner.** Shadow DOM isolation protects the tool's own panel; it does not audit the target page for security vulnerabilities.
 - **Not a grammar or content checker.** Copy quality, tone, and brand consistency are out of scope.
 - **Not persistent.** The tool has no memory of prior scans. Each click is a fresh, independent audit of the current DOM state.

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>designSense — Dark Pattern & UX Auditor</title>
-  <meta name="description" content="Instantly audit any web prototype for dark patterns and usability issues. 18 deceptive patterns + Nielsen's 10 heuristics. No data leaves your browser.">
+  <meta name="description" content="Instantly audit any web prototype for dark patterns, usability issues, and accessibility gaps. 27 deceptive patterns + 10 usability heuristics + accessibility checks. No data leaves your browser.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -44,7 +44,7 @@
         <h1>Catch dark patterns &amp;<br>usability issues before you ship.</h1>
 
         <p class="hero-sub">
-          Run instantly in your browser. Audits 27 deceptive patterns and Nielsen's 10 heuristics.
+          Run instantly in your browser. Audits 27 deceptive patterns, 10 usability heuristics, and accessibility.
           Every finding includes a specific fix. Nothing ever leaves your device.
         </p>
 
@@ -92,6 +92,10 @@
           <span class="stat-label">UX Heuristics</span>
         </div>
         <div class="stat-item">
+          <span class="stat-num">13</span>
+          <span class="stat-label">Accessibility Checks</span>
+        </div>
+        <div class="stat-item">
           <span class="stat-num">0</span>
           <span class="stat-label">Data Shared</span>
         </div>
@@ -136,7 +140,7 @@
     <section id="checks" class="section alt" data-ds-ignore>
       <div class="container">
         <h2>What it checks</h2>
-        <p class="section-sub">37 checks across two frameworks. Every issue includes severity and a specific fix.</p>
+        <p class="section-sub">27 dark patterns, 10 usability heuristics, and 13 accessibility checks. Every issue includes severity and a specific fix.</p>
 
         <div class="checks-stack">
 
@@ -240,49 +244,114 @@
             </div>
             <div class="heuristic-grid">
               <div class="heuristic-item">
-                <span class="tag hc">High</span>
+                <span class="tag hc">Reliable</span>
                 <span><strong>H1 System Status</strong> — loading states, progress indicators</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag hc">High</span>
+                <span class="tag hc">Reliable</span>
                 <span><strong>H3 User Control</strong> — confirmation on destructive actions</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag hc">High</span>
-                <span><strong>H4 Consistency</strong> — heading hierarchy, single H1</span>
+                <span class="tag hc">Reliable</span>
+                <span><strong>H4 Consistency</strong> — button style consistency</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag hc">High</span>
+                <span class="tag hc">Reliable</span>
                 <span><strong>H5 Error Prevention</strong> — field types, required indicators</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag hc">High</span>
-                <span><strong>H6 Recognition</strong> — icon-only buttons, breadcrumbs</span>
+                <span class="tag hc">Reliable</span>
+                <span><strong>H6 Recognition</strong> — breadcrumb navigation</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag hc">High</span>
-                <span><strong>H8 Aesthetics</strong> — WCAG AA contrast, font scale</span>
+                <span class="tag hc">Reliable</span>
+                <span><strong>H8 Aesthetics</strong> — tracked under Accessibility</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag be">Best effort</span>
+                <span class="tag be">Needs review</span>
                 <span><strong>H2 Real World Match</strong> — technical jargon in UI copy</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag be">Best effort</span>
-                <span><strong>H7 Flexibility</strong> — skip link, search on long lists</span>
+                <span class="tag be">Needs review</span>
+                <span><strong>H7 Flexibility</strong> — search on long lists</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag be">Best effort</span>
+                <span class="tag be">Needs review</span>
                 <span><strong>H9 Error Recovery</strong> — generic error messages</span>
               </div>
               <div class="heuristic-item">
-                <span class="tag be">Best effort</span>
+                <span class="tag be">Needs review</span>
                 <span><strong>H10 Help</strong> — password hints, empty state guidance</span>
               </div>
             </div>
             <div class="heuristic-legend">
-              <strong>High confidence</strong> = reliable DOM/CSS detection. &nbsp;·&nbsp;
-              <strong>Best effort</strong> = text/pattern heuristic — review findings in context.
+              <strong>Reliable</strong> = found directly in the page's code — very likely real. &nbsp;·&nbsp;
+              <strong>Needs review</strong> = matched a common pattern — read it in context before assuming it's wrong.
+            </div>
+          </div>
+
+          <!-- ── Accessibility ── -->
+          <div class="check-block">
+            <div class="check-block-hd">
+              <div>
+                <h3 class="check-block-title">Accessibility</h3>
+                <p class="check-block-meta">WCAG-adjacent checks · screen reader &amp; keyboard access</p>
+              </div>
+              <span class="check-block-count">13</span>
+            </div>
+            <div class="heuristic-grid">
+              <div class="heuristic-item">
+                <span class="tag be">Needs review</span>
+                <span><strong>A1 Live Regions</strong> — form submits with no aria-live/status</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A2 Heading Structure</strong> — skipped levels, multiple H1s</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A3 Keyboard Access</strong> — clickable elements missing role/tabindex</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A4 Radio Groups</strong> — missing fieldset/legend</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A5 Icon Labels</strong> — icon-only buttons missing aria-label</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A6 Field Labels</strong> — placeholder used as the only label</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A7 Skip Link</strong> — no skip-to-content link found</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag be">Needs review</span>
+                <span><strong>A8 Autocomplete</strong> — missing on email/name/phone fields</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A9 Color Contrast</strong> — WCAG AA text contrast ratio</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A10 Type Scale</strong> — too many distinct font sizes</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A11 Color Palette</strong> — too many distinct text colors</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A12 Error Association</strong> — errors not linked via aria-describedby</span>
+              </div>
+              <div class="heuristic-item">
+                <span class="tag hc">Reliable</span>
+                <span><strong>A13 Invalid Fields</strong> — aria-invalid with no visible error message</span>
+              </div>
             </div>
           </div>
 
@@ -351,7 +420,7 @@
       </p>
     </div>
     <div style="background:#cccccc; width:100%; padding:10px 0; text-align:center;">
-      <p style="color:#1a1a1a; font-size:13px; font-weight:500;">Created and directed by Padmavathi Verroju. Powered by Claude.</p>
+      <p style="color:var(--ink); font-size:13px; font-weight:500;">Created and directed by Padmavathi Verroju. Powered by Claude.</p>
     </div>
   </footer>
 
@@ -404,6 +473,13 @@
       node = node.parentElement;
     }
     return 'rgb(255, 255, 255)';
+  }
+
+  // For page-level findings with no single "wrong" element (e.g. "no breadcrumbs anywhere"),
+  // point at the nearest relevant landmark instead of document.body so "Jump to element" has
+  // somewhere meaningful to go. Falls back to document.body if the page has no landmarks at all.
+  function pageAnchor() {
+    return document.querySelector('header') || document.querySelector('nav') || document.body;
   }
 
   // contextSelector (optional): when provided, only flag text inside matching UI containers.
@@ -577,7 +653,14 @@
   }
 
   function checkDisguisedAds() {
-    document.querySelectorAll('[class*="sponsored"],[class*="ad-"],[class*="-ad"],[data-ad]').forEach(function(el) {
+    // "ad" as a substring is a bad fingerprint on its own — it matches "grad-icon",
+    // "download-btn", "upload-area", "quad-core", etc. Require "ad"/"ads" as its own
+    // hyphen/underscore/space-delimited token so those false positives don't fire.
+    var adTokenPattern = /(^|[\s_-])ads?([\s_-]|$)/i;
+    document.querySelectorAll('[class*="ad"],[class*="sponsored"],[data-ad]').forEach(function(el) {
+      var cls = el.getAttribute('class') || '';
+      var isAdMarked = el.hasAttribute('data-ad') || /sponsored/i.test(cls) || adTokenPattern.test(cls);
+      if (!isAdMarked) return;
       var hasLabel = el.querySelector('[class*="label"],[class*="badge"],[aria-label]') || /sponsored|advertisement|\bad\b/i.test(el.textContent.substring(0, 30));
       if (!hasLabel) {
         addIssue('Deceptive Pattern', 'Disguised Ads', 'Medium', el, 'Ad/sponsored element lacks a clear label', 'Label all paid content clearly as "Ad" or "Sponsored".', 'medium');
@@ -591,10 +674,22 @@
   }
 
   function checkFakeSocialProof() {
-    document.querySelectorAll('[class*="review"],[class*="testimonial"],[class*="rating"]').forEach(function(el) {
+    // Component libraries commonly apply the same class prefix (e.g. "testimonial") to every
+    // nested part of one card — the wrapper, the photo, the quote, the author block — not just
+    // the card itself. Matched naively, one visual testimonial can count as 5-10 "reviews".
+    // Keep only the outermost matched element per card, same as the modal-dedup logic above.
+    var candidates = Array.prototype.slice.call(document.querySelectorAll('[class*="review"],[class*="testimonial"],[class*="rating"]'));
+    var cards = candidates.filter(function(el) {
+      return !candidates.some(function(other) { return other !== el && other.contains(el); });
+    });
+    cards.forEach(function(el) {
       var hasVerified = /verified|purchase|confirmed|source/i.test(el.textContent);
       var hasDate = /\d{4}|\d+\s+(days?|weeks?|months?)\s+ago/i.test(el.textContent);
-      if (!hasVerified && !hasDate) {
+      // A named, titled person with a photo is itself a credible attribution — this doesn't
+      // need a literal "Verified" badge to be trustworthy the way an anonymous quote would.
+      var hasNamedAttribution = el.querySelector('img') &&
+        /\b(CEO|CTO|CFO|COO|Founder|Co-founder|President|Chairman|Director|Manager|VP|Vice President|Head|Lead|Owner|Partner|Principal|Chief)\b/i.test(el.textContent);
+      if (!hasVerified && !hasDate && !hasNamedAttribution) {
         addIssue('Deceptive Pattern', 'Fake Social Proof', 'Medium', el, 'Review or testimonial lacks verification status and date', 'Add verified purchase badge and timestamp to all reviews.', 'medium');
       }
     });
@@ -652,15 +747,22 @@
     document.querySelectorAll('form').forEach(function(form) {
       var submit = form.querySelector('[type="submit"],button:not([type="button"]):not([type="reset"])');
       if (!submit) return;
-      var hasLoader = form.querySelector('[class*="spinner"],[class*="loading"],[class*="loader"]') || submit.dataset.loading !== undefined || submit.getAttribute('aria-busy');
+      var hasLoader = form.querySelector('[class*="spinner"],[class*="loading"],[class*="loader"],[class*="busy"],[class*="pending"],[class*="processing"]') || submit.dataset.loading !== undefined || submit.dataset.loadingText !== undefined || submit.hasAttribute('aria-busy') || submit.hasAttribute('aria-disabled');
       if (!hasLoader) {
-        addIssue('Nielsen Heuristic', 'H1: System Status', 'Medium', submit, 'Submit button has no visible loading/processing state', 'Disable the button and show a spinner or "Processing..." label on submit.', 'high');
+        addIssue('Nielsen Heuristic', 'H1: System Status', 'Medium', submit, 'No loading/processing markup found near this submit button', 'Verify by hand: click submit and confirm the button shows a spinner, "Processing..." label, or disabled state. This check can only see markup present before submit — a state added dynamically via JS at click time won\'t show up here.', 'best-effort');
       }
     });
-    var hasMultiStep = document.querySelectorAll('[class*="step"],[data-step],[class*="wizard"]').length > 1;
+    var stepEls = document.querySelectorAll('[class*="step"],[data-step],[class*="wizard"]');
     var hasProgress = document.querySelector('[class*="progress"],[role="progressbar"],[aria-valuenow]');
-    if (hasMultiStep && !hasProgress) {
-      addIssue('Nielsen Heuristic', 'H1: System Status', 'High', document.body, 'Multi-step flow detected but no progress indicator found', 'Add a step counter ("Step 1 of 3") or progress bar.', 'medium');
+    if (stepEls.length > 1 && !hasProgress) {
+      addIssue('Nielsen Heuristic', 'H1: System Status', 'High', stepEls[0], 'Multi-step flow detected but no progress indicator found', 'Add a step counter ("Step 1 of 3") or progress bar.', 'medium');
+    }
+    var formsWithSubmit = Array.prototype.filter.call(document.querySelectorAll('form'), function(f) {
+      return f.querySelector('[type="submit"],button:not([type="button"]):not([type="reset"])');
+    });
+    var hasLiveRegion = document.querySelector('[aria-live],[role="status"],[role="alert"]');
+    if (formsWithSubmit.length > 0 && !hasLiveRegion) {
+      addIssue('Accessibility', 'A1: Live Regions', 'Low', formsWithSubmit[0], 'Page has form submissions but no aria-live, role="status", or role="alert" region anywhere', 'Add at least one live region so submit outcomes (success, failure, validation) are announced to screen reader users, not just shown visually.', 'best-effort');
     }
   }
 
@@ -674,6 +776,7 @@
         addIssue('Nielsen Heuristic', 'H2: Real World Match', 'Low', el, 'Technical jargon in UI copy: "' + matches.slice(0, 3).join('", "') + '"', 'Replace technical terms with plain language your users already know.', 'best-effort');
       }
     });
+    scanText(/\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}|(?:TypeError|ReferenceError|SyntaxError):|at\s+Object\.|at\s+[\w$.]+\s+\(/, 'Nielsen Heuristic', 'H2: Real World Match', 'Medium', 'Raw technical output shown to users', 'Never surface ISO timestamps or stack traces directly. Format dates for humans and log errors server-side instead.', 'best-effort');
   }
 
   function checkH3() {
@@ -693,21 +796,32 @@
         addIssue('Nielsen Heuristic', 'H3: User Control', 'Low', form, 'Form has a submit but no cancel or back option', 'Always give users an exit path so they can abandon without committing.', 'high');
       }
     });
+    document.querySelectorAll('[role="dialog"],[role="alertdialog"],[class*="modal"],[class*="popup"],[class*="overlay"],[class*="lightbox"]').forEach(function(el) {
+      var s = window.getComputedStyle(el);
+      if (s.display === 'none' || s.visibility === 'hidden' || parseFloat(s.opacity) === 0) return;
+      var rect = el.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      var hasCloseAffordance = el.querySelector('[class*="close"],[aria-label*="close" i],[aria-label*="dismiss" i],[aria-label*="cancel" i]')
+        || /close|cancel|dismiss|got it|no thanks|×|✕|✖/i.test(el.textContent);
+      if (!hasCloseAffordance) {
+        addIssue('Nielsen Heuristic', 'H3: User Control', 'High', el, 'Modal or dialog has no visible close, cancel, or dismiss control', 'Give every dialog a clear "emergency exit" so users can back out of an unwanted action.', 'medium');
+      }
+    });
   }
 
   function checkH4() {
-    var prevLevel = 0, headingSkipped = false;
+    var prevLevel = 0, skippedHeading = null;
     document.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(function(h) {
       var lvl = +h.tagName[1];
-      if (prevLevel > 0 && lvl > prevLevel + 1) headingSkipped = true;
+      if (prevLevel > 0 && lvl > prevLevel + 1 && !skippedHeading) skippedHeading = h;
       prevLevel = lvl;
     });
-    if (headingSkipped) {
-      addIssue('Nielsen Heuristic', 'H4: Consistency', 'Medium', document.body, 'Heading levels are skipped (e.g. H1 to H3)', 'Use sequential heading levels. Skipping levels breaks screen reader navigation.', 'high');
+    if (skippedHeading) {
+      addIssue('Accessibility', 'A2: Heading Structure', 'Medium', skippedHeading, 'Heading levels are skipped (jumps to <' + skippedHeading.tagName.toLowerCase() + '> here)', 'Use sequential heading levels. Skipping levels breaks screen reader navigation.', 'high');
     }
     var h1s = document.querySelectorAll('h1');
     if (h1s.length > 1) {
-      addIssue('Nielsen Heuristic', 'H4: Consistency', 'Medium', h1s[1], h1s.length + ' H1 elements on page — only one should exist', 'Use a single H1 as the primary page title. Use H2-H6 for sections.', 'high');
+      addIssue('Accessibility', 'A2: Heading Structure', 'Medium', h1s[1], h1s.length + ' H1 elements on page — only one should exist', 'Use a single H1 as the primary page title. Use H2-H6 for sections.', 'high');
     }
     var buttons = document.querySelectorAll('button,[role="button"]');
     var buttonStyles = [];
@@ -719,6 +833,10 @@
     if (buttonStyles.length > 4 && buttons.length > 6) {
       addIssue('Nielsen Heuristic', 'H4: Consistency', 'Low', buttons[0], buttonStyles.length + ' distinct button style variants detected', 'Standardise button styles using a design system.', 'medium');
     }
+    document.querySelectorAll('div[onclick],span[onclick]').forEach(function(el) {
+      if (el.getAttribute('role') === 'button' || el.hasAttribute('tabindex')) return;
+      addIssue('Accessibility', 'A3: Keyboard Access', 'Medium', el, 'Non-interactive element has an onclick handler but no role="button" or tabindex', 'Use a real <button> or <a>, or add role="button" and tabindex="0" — keyboard and screen-reader users can\'t reach a div/span the platform doesn\'t recognize as interactive.', 'high');
+    });
   }
 
   function checkH5() {
@@ -728,8 +846,19 @@
       }
       if (el.required) {
         var label = document.querySelector('label[for="' + el.id + '"]') || el.closest('label');
-        if (label && !/\*|required/i.test(label.textContent)) {
-          addIssue('Nielsen Heuristic', 'H5: Error Prevention', 'Medium', el, 'Required field has no visual indicator (* or "Required")', 'Mark required fields with * and explain the convention at the top of the form.', 'high');
+        if (label) {
+          var markerPattern = /\*|required/i;
+          var wrapper = label.parentElement;
+          var pseudoContent = function(node, pseudo){ return node ? window.getComputedStyle(node, pseudo).content : ''; };
+          var hasMarker = markerPattern.test(label.textContent) ||
+            (wrapper && markerPattern.test(wrapper.textContent)) ||
+            markerPattern.test(pseudoContent(label, '::before')) ||
+            markerPattern.test(pseudoContent(label, '::after')) ||
+            markerPattern.test(pseudoContent(wrapper, '::before')) ||
+            markerPattern.test(pseudoContent(wrapper, '::after'));
+          if (!hasMarker) {
+            addIssue('Nielsen Heuristic', 'H5: Error Prevention', 'Medium', el, 'Required field has no visual indicator (* or "Required")', 'Mark required fields with * and explain the convention at the top of the form.', 'high');
+          }
         }
       }
       if (el.type === 'password') {
@@ -740,6 +869,19 @@
         }
       }
     });
+    var radioGroups = {};
+    document.querySelectorAll('input[type="radio"][name]').forEach(function(el) {
+      (radioGroups[el.name] = radioGroups[el.name] || []).push(el);
+    });
+    Object.keys(radioGroups).forEach(function(name) {
+      var group = radioGroups[name];
+      if (group.length < 2) return;
+      var fieldset = group[0].closest('fieldset');
+      var hasLegend = fieldset && fieldset.querySelector('legend');
+      if (!hasLegend) {
+        addIssue('Accessibility', 'A4: Radio Groups', 'Medium', group[0], 'Radio group "' + name + '" has no <fieldset>/<legend> grouping', 'Wrap related radio options in a <fieldset> with a <legend> describing the choice — without it, screen reader users can\'t tell the options are related.', 'high');
+      }
+    });
   }
 
   function checkH6() {
@@ -748,7 +890,7 @@
       var hasLabel = el.getAttribute('aria-label') || el.getAttribute('title');
       var hasIcon = el.querySelector('svg,img,i,[class*="icon"]');
       if (hasIcon && !hasText && !hasLabel) {
-        addIssue('Nielsen Heuristic', 'H6: Recognition', 'High', el, 'Icon-only button with no accessible label (missing aria-label or title)', 'Add aria-label to every icon-only button. Icons alone are ambiguous.', 'high');
+        addIssue('Accessibility', 'A5: Icon Labels', 'High', el, 'Icon-only button with no accessible label (missing aria-label or title)', 'Add aria-label to every icon-only button. Icons alone are ambiguous.', 'high');
       }
     });
     // Skip on file:// — the path there is the local folder structure, not site
@@ -756,24 +898,50 @@
     if (window.location.protocol !== 'file:') {
       var depth = window.location.pathname.split('/').filter(Boolean).length;
       if (depth > 2 && !document.querySelector('[aria-label*="breadcrumb"],[class*="breadcrumb"]')) {
-        addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', document.body, 'Deep page URL but no breadcrumb navigation found', 'Add breadcrumbs on deep pages so users know where they are.', 'medium');
+        addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', pageAnchor(), 'Deep page URL but no breadcrumb navigation found', 'Add breadcrumbs on deep pages so users know where they are.', 'medium');
       }
     }
+    document.querySelectorAll('input,textarea').forEach(function(el) {
+      if (['hidden', 'submit', 'button', 'checkbox', 'radio'].indexOf(el.type) !== -1) return;
+      var hasPlaceholder = el.placeholder && el.placeholder.trim().length > 0;
+      if (!hasPlaceholder) return;
+      var hasLabel = (el.id && document.querySelector('label[for="' + el.id + '"]')) || el.closest('label') || el.getAttribute('aria-label') || el.getAttribute('aria-labelledby');
+      if (!hasLabel) {
+        addIssue('Accessibility', 'A6: Field Labels', 'High', el, 'Field relies on placeholder text as its only label ("' + el.placeholder.substring(0, 40) + '")', 'Add a visible <label>. Placeholder text disappears the moment the user starts typing, forcing them to recall what the field was for.', 'high');
+      }
+    });
   }
 
   function checkH7() {
     var skipLink = document.querySelector('a[href="#main"],a[href="#content"],a[href="#maincontent"],a[href="#main-content"],[class*="skip-"]');
     if (!skipLink) {
-      addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Medium', document.body, 'No skip-to-content link found', 'Add a visually hidden "Skip to main content" as the first focusable element.', 'high');
+      addIssue('Accessibility', 'A7: Skip Link', 'Medium', pageAnchor(), 'No skip-to-content link found', 'Add a visually hidden "Skip to main content" as the first focusable element.', 'high');
     }
-    var listCount = Array.prototype.filter.call(document.querySelectorAll('li,tr,[class*="card"],[class*="item"]'), function(el) {
+    var longListEls = Array.prototype.filter.call(document.querySelectorAll('li,tr,[class*="card"],[class*="item"]'), function(el) {
       return !el.closest('[data-ds-ignore]');
-    }).length;
-    var longList = listCount > 20;
+    });
     var hasSearch = document.querySelector('[type="search"],[role="search"],[class*="search-input"]');
-    if (longList && !hasSearch) {
-      addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Low', document.body, 'Long list/grid with no search or filter control', 'Add search or filter to help power users find items quickly.', 'best-effort');
+    if (longListEls.length > 20 && !hasSearch) {
+      addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Low', longListEls[0], 'Long list/grid with no search or filter control', 'Add search or filter to help power users find items quickly.', 'best-effort');
     }
+    var autocompleteChecks = [
+      { test: /email/i, token: 'email' },
+      { test: /^(first.?name|fname|given.?name)$/i, token: 'given-name' },
+      { test: /^(last.?name|lname|surname|family.?name)$/i, token: 'family-name' },
+      { test: /^(full.?name|name)$/i, token: 'name' },
+      { test: /phone|tel/i, token: 'tel' }
+    ];
+    document.querySelectorAll('input').forEach(function(el) {
+      var ac = el.getAttribute('autocomplete');
+      if (ac && ac !== 'off' && ac !== '') return;
+      var probe = (el.name || '') + ' ' + (el.id || '');
+      for (var i = 0; i < autocompleteChecks.length; i++) {
+        if (autocompleteChecks[i].test.test(probe)) {
+          addIssue('Accessibility', 'A8: Autocomplete', 'Low', el, 'Field looks like "' + autocompleteChecks[i].token + '" but has no autocomplete attribute', 'Add autocomplete="' + autocompleteChecks[i].token + '" so browsers and password managers can fill it automatically for returning users.', 'best-effort');
+          break;
+        }
+      }
+    });
   }
 
   function checkH8() {
@@ -781,6 +949,7 @@
     var reported = [];
     document.querySelectorAll('p,span,label,a,button,h1,h2,h3,h4,h5,h6,li,td').forEach(function(el) {
       if (el.children.length > 0 || reported.indexOf(el) !== -1) return;
+      if (!el.textContent.trim()) return;
       var s = window.getComputedStyle(el);
       var bg = effectiveBackground(el);
       var ratio = contrastRatio(s.color, bg);
@@ -790,35 +959,59 @@
         lowContrastCount++;
         reported.push(el);
         if (lowContrastCount <= 5) {
-          addIssue('Nielsen Heuristic', 'H8: Aesthetics', ratio < 2 ? 'Critical' : 'High', el, 'Contrast ratio ' + ratio.toFixed(1) + ':1 (WCAG AA minimum ' + minRatio + ':1)', 'Increase contrast. Text: ' + s.color + ' on ' + bg, 'high');
+          var snippet = el.textContent.trim().substring(0, 40);
+          var tag = el.tagName.toLowerCase();
+          addIssue('Accessibility', 'A9: Color Contrast', ratio < 2 ? 'Critical' : 'High', el, 'Contrast ratio ' + ratio.toFixed(1) + ':1 on this <' + tag + '>: "' + snippet + '" (WCAG AA minimum ' + minRatio + ':1)', 'Darken the text or lighten the background on this <' + tag + '> element until it reaches ' + minRatio + ':1. Currently ' + s.color + ' text on ' + bg + ' background.', 'high');
         }
       }
     });
     if (lowContrastCount > 5) {
-      addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'High', document.body, lowContrastCount + ' total low-contrast text elements (showing first 5 above)', 'Run a full WCAG AA contrast audit across all text in this design.', 'high');
+      addIssue('Accessibility', 'A9: Color Contrast', 'High', document.body, lowContrastCount + ' total low-contrast text elements (showing first 5 above)', 'Run a full WCAG AA contrast audit across all text in this design.', 'high');
     }
     var fontSizes = [];
+    var textColors = [];
     document.body.querySelectorAll('*').forEach(function(el) {
       if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.tagName === 'NOSCRIPT' || el.tagName === 'TEMPLATE') return;
       if (el.closest('script,style,noscript,template')) return;
       if (el.children.length || !el.textContent.trim() || el.getClientRects().length === 0) return;
-      var sz = window.getComputedStyle(el).fontSize;
-      if (fontSizes.indexOf(sz) === -1) fontSizes.push(sz);
+      var cs = window.getComputedStyle(el);
+      if (fontSizes.indexOf(cs.fontSize) === -1) fontSizes.push(cs.fontSize);
+      if (textColors.indexOf(cs.color) === -1) textColors.push(cs.color);
     });
     if (fontSizes.length > 8) {
-      addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'Low', document.body, fontSizes.length + ' distinct font sizes in use', 'Limit to 4-6 type scale steps. Too many sizes signal no consistent design system.', 'high');
+      addIssue('Accessibility', 'A10: Type Scale', 'Low', document.body, fontSizes.length + ' distinct font sizes in use', 'Limit to 4-6 type scale steps. Too many sizes signal no consistent design system.', 'high');
+    }
+    if (textColors.length > 10) {
+      addIssue('Accessibility', 'A11: Color Palette', 'Low', document.body, textColors.length + ' distinct text colors in use', 'Limit text colors to a small, deliberate palette (ink, muted, accent, semantic colors). Too many distinct colors signal no consistent visual system.', 'high');
     }
   }
 
   function checkH9() {
-    document.querySelectorAll('[class*="error"],[class*="alert"],[role="alert"],[aria-live]').forEach(function(el) {
+    // Same class-prefix over-matching risk as testimonials/reviews: an alert/error wrapper
+    // and its nested icon, message, and dismiss-button elements can all independently match
+    // [class*="alert"]/[class*="error"]. Keep only the outermost matched element per group.
+    var errorCandidates = Array.prototype.slice.call(document.querySelectorAll('[class*="error"],[class*="alert"],[role="alert"],[aria-live]'));
+    var errorEls = errorCandidates.filter(function(el) {
+      return !errorCandidates.some(function(other) { return other !== el && other.contains(el); });
+    });
+    errorEls.forEach(function(el) {
       if (/something\s+went\s+wrong|an?\s+error\s+(has\s+)?occurred|oops|try\s+again\s+later/i.test(el.textContent)) {
         addIssue('Nielsen Heuristic', 'H9: Error Recovery', 'High', el, 'Generic error message: "' + el.textContent.trim().substring(0, 60) + '"', 'Explain what failed specifically and tell the user exactly what to do next.', 'best-effort');
       }
       var isLinkedToField = el.id && document.querySelector('[aria-describedby="' + el.id + '"]');
       var isInlineWithField = el.closest('label,fieldset,[class*="field"],[class*="form-group"]');
       if (!isLinkedToField && !isInlineWithField) {
-        addIssue('Nielsen Heuristic', 'H9: Error Recovery', 'Medium', el, 'Error element not associated with a specific input field', 'Use aria-describedby to link errors to fields. Place errors adjacent to the failing input.', 'medium');
+        addIssue('Accessibility', 'A12: Error Association', 'Medium', el, 'Error element not associated with a specific input field', 'Use aria-describedby to link errors to fields. Place errors adjacent to the failing input.', 'medium');
+      }
+    });
+    document.querySelectorAll('[aria-invalid="true"]').forEach(function(el) {
+      var describedBy = el.getAttribute('aria-describedby');
+      var describedEl = describedBy && document.getElementById(describedBy);
+      var hasDescribedText = describedEl && describedEl.textContent.trim().length > 0;
+      var parent = el.closest('div,fieldset,[class*="field"],[class*="form-group"]');
+      var hasNearbyErrorText = parent && parent.querySelector('[class*="error"],[class*="invalid"],[role="alert"]');
+      if (!hasDescribedText && !hasNearbyErrorText) {
+        addIssue('Accessibility', 'A13: Invalid Fields', 'High', el, 'Field is marked aria-invalid but has no visible error message linked to it', 'A red border or aria-invalid flag alone isn\'t diagnosable. Add visible error text near the field and link it with aria-describedby.', 'medium');
       }
     });
   }
@@ -839,6 +1032,15 @@
           addIssue('Nielsen Heuristic', 'H10: Help', 'Medium', el, 'Empty state lacks descriptive copy or a next-step action', 'Empty states should explain why and offer a clear CTA.', 'best-effort');
         }
       });
+    });
+    document.querySelectorAll('form').forEach(function(form) {
+      var requiredCount = form.querySelectorAll('[required]').length;
+      if (requiredCount >= 8) {
+        var hasHelp = form.querySelector('[class*="tooltip"],[class*="hint"],[class*="help"],[aria-describedby]');
+        if (!hasHelp) {
+          addIssue('Nielsen Heuristic', 'H10: Help', 'Low', form, 'Form has ' + requiredCount + ' required fields but no help text, hints, or tooltips anywhere', 'Long forms benefit from inline guidance. Add hint text or tooltips for fields whose expected input isn\'t obvious.', 'best-effort');
+        }
+      }
     });
   }
 
@@ -872,49 +1074,93 @@
     var total = issues.length;
     var deceptive = issues.filter(function(i){return i.category==='Deceptive Pattern';});
     var heuristics = issues.filter(function(i){return i.category==='Nielsen Heuristic';});
+    var accessibility = issues.filter(function(i){return i.category==='Accessibility';});
 
     var panel = document.createElement('div');
     panel.style.cssText = 'all:initial;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:13px;line-height:1.5;color:#1f2937;background:#fff;width:440px;height:100vh;box-shadow:-4px 0 28px rgba(0,0,0,.18);display:flex;flex-direction:column;pointer-events:all;overflow:hidden';
 
     var badgeHtml = Object.keys(counts).filter(function(k){return counts[k]>0;}).map(function(k){
-      return '<span class="badge" style="background:'+sevColor(k)+'">'+counts[k]+' '+esc(k)+'</span>';
+      return '<button type="button" class="badge" data-severity="'+k+'" aria-pressed="false" style="background:'+sevColor(k)+'">'+counts[k]+' '+esc(k)+'</button>';
     }).join('');
     if(total===0) badgeHtml='<span class="badge" style="background:#16a34a">No issues found</span>';
 
-    panel.innerHTML = '<style>*{box-sizing:border-box;margin:0;padding:0}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:2px}.hd{background:#0f172a;color:#fff;padding:14px 16px;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}.hd-t{font-size:14px;font-weight:700}.hd-s{font-size:11px;color:#94a3b8;margin-top:2px}.cls{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:20px;padding:0 4px;line-height:1;border-radius:4px}.cls:hover{color:#fff;background:#1e293b}.min{background:none;border:none;color:#94a3b8;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;border-radius:4px;margin-right:2px}.min:hover{color:#fff;background:#1e293b}.sum{padding:10px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;flex-shrink:0}.sum-hd{font-size:12px;font-weight:700;color:#1f2937;margin-bottom:8px}.bgs{display:flex;gap:6px;flex-wrap:wrap}.badge{display:inline-flex;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;color:#fff}.tabs{display:flex;border-bottom:1px solid #e2e8f0;background:#fff;flex-shrink:0}.tab{flex:1;padding:9px 4px;font-size:11px;font-weight:500;border:none;background:none;cursor:pointer;color:#6b7280;border-bottom:2px solid transparent}.tab:hover{color:#0f172a}.tab.on{color:#0f172a;border-bottom-color:#6366f1;font-weight:700}.list{flex:1;overflow-y:auto;padding:8px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer}.card:hover{border-color:#a5b4fc}.card.open{border-color:#6366f1;background:#fafafe}.ct{display:flex;align-items:flex-start;gap:8px}.dot{width:8px;min-width:8px;height:8px;border-radius:50%;margin-top:4px}.ci{font-size:12px;font-weight:600;color:#1f2937;flex:1}.cm2{font-size:10px;color:#6b7280;margin-top:1px}.cb2{display:none;margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9}.card.open .cb2{display:block}.msg{font-size:11px;color:#374151;margin-bottom:6px;word-break:break-word}.rec{font-size:11px;color:#065f46;background:#ecfdf5;border-left:3px solid #10b981;padding:6px 8px;border-radius:0 4px 4px 0;margin-bottom:6px}.fr{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.conf{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}.ch{background:#dcfce7;color:#15803d}.cm3{background:#e0f2fe;color:#0369a1}.cbe{background:#fef9c3;color:#854d0e}.jmp{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;color:#374151;cursor:pointer;margin-left:auto}.jmp:hover{background:#6366f1;color:#fff;border-color:#6366f1}.empty{text-align:center;padding:40px 20px;color:#6b7280}.ei{font-size:36px;margin-bottom:8px}.footer{padding:10px 16px;border-top:1px solid #e2e8f0;flex-shrink:0}.exp{width:100%;padding:7px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:11px;cursor:pointer;color:#374151;margin-bottom:6px}.exp:hover{background:#0f172a;color:#fff;border-color:#0f172a}.prv{font-size:10px;color:#9ca3af;text-align:center}</style>'
-      +'<div class="hd"><div><div class="hd-t">designSense</div><div class="hd-s">18 dark patterns · Nielsen\'s 10 heuristics</div></div><div style="display:flex;gap:0;align-items:center"><button class="min" id="dv-min" title="Minimize" aria-label="Minimize"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="12" height="12" rx="3"/><line x1="4" y1="9.5" x2="10" y2="9.5"/></svg></button><button class="cls" id="dv-close" aria-label="Close">&#x2715;</button></div></div>'
-      +'<div class="sum"><div class="sum-hd">'+total+' violation'+(total!==1?'s':'')+' found</div><div class="bgs">'+badgeHtml+'</div></div>'
-      +'<div class="tabs"><button class="tab on" data-tab="all">All ('+total+')</button><button class="tab" data-tab="deceptive">Dark Patterns ('+deceptive.length+')</button><button class="tab" data-tab="heuristic">Heuristics ('+heuristics.length+')</button></div>'
+    panel.innerHTML = '<style>*{box-sizing:border-box;margin:0;padding:0}::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:2px}.hd{background:#0f172a;color:#fff;padding:14px 16px;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}.hd-t{font-size:14px;font-weight:700}.hd-s{font-size:11px;color:#94a3b8;margin-top:2px}.cls{background:none;border:none;color:#94a3b8;cursor:pointer;font-size:20px;padding:0 4px;line-height:1;border-radius:4px}.cls:hover{color:#fff;background:#1e293b}.min{background:none;border:none;color:#94a3b8;cursor:pointer;padding:0 5px;display:inline-flex;align-items:center;border-radius:4px;margin-right:2px}.min:hover{color:#fff;background:#1e293b}.sum{padding:10px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;flex-shrink:0}.sum-hd{font-size:12px;font-weight:700;color:#1f2937;margin-bottom:8px}.bgs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.badge{display:inline-flex;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;color:#fff;border:none;font-family:inherit;cursor:default}.badge[data-severity]{cursor:pointer;transition:opacity .15s,box-shadow .15s}.badge[data-severity]:hover{opacity:.85}.badge[data-severity].on{box-shadow:0 0 0 2px rgba(15,23,42,.6)}.bgs.filtered .badge[data-severity]:not(.on){opacity:.4}.clf{font-size:10px;color:#6366f1;background:none;border:none;cursor:pointer;font-family:inherit;padding:2px 0;text-decoration:underline;display:block;margin-top:6px}.clf:hover{color:#4338ca}.tabs{display:flex;border-bottom:1px solid #e2e8f0;background:#fff;flex-shrink:0}.tab{flex:1;padding:9px 4px;font-size:11px;font-weight:500;border:none;background:none;cursor:pointer;color:#6b7280;border-bottom:2px solid transparent}.tab:hover{color:#0f172a}.tab.on{color:#0f172a;border-bottom-color:#6366f1;font-weight:700}.list{flex:1;overflow-y:auto;padding:8px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:10px 12px;margin-bottom:6px;cursor:pointer}.card:hover{border-color:#a5b4fc}.card.open{border-color:#6366f1;background:#fafafe}.ct{display:flex;align-items:flex-start;gap:8px}.dot{width:8px;min-width:8px;height:8px;border-radius:50%;margin-top:4px}.ci{font-size:12px;font-weight:600;color:#1f2937;flex:1}.cm2{font-size:10px;color:#6b7280;margin-top:1px}.cpv{font-size:11px;color:#374151;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cb2{display:none;margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9}.card.open .cb2{display:block}.msg{font-size:11px;color:#374151;margin-bottom:6px;word-break:break-word}.rec{font-size:11px;color:#065f46;background:#ecfdf5;border-left:3px solid #10b981;padding:6px 8px;border-radius:0 4px 4px 0;margin-bottom:6px}.fr{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.conf{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500}.ch{background:#dcfce7;color:#15803d}.cm{background:#e0f2fe;color:#0369a1}.cb{background:#fef9c3;color:#854d0e}.jmp{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;color:#374151;cursor:pointer}.jmp:hover{background:#6366f1;color:#fff;border-color:#6366f1}.cnt{font-size:11px;font-weight:600;color:#6366f1;background:#eef2ff;padding:1px 6px;border-radius:8px}.jr{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:6px}.jrl{font-size:10px;color:#6b7280;margin-right:2px}.jmpn{font-size:10px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;color:#374151;cursor:pointer}.jmpn:hover{background:#6366f1;color:#fff;border-color:#6366f1}.jmp.stale,.jmpn.stale{opacity:.4;text-decoration:line-through;cursor:not-allowed;background:#f8fafc;color:#374151}.jmp.stale:hover,.jmpn.stale:hover{background:#f8fafc;color:#374151;border-color:#e2e8f0}.empty{text-align:center;padding:40px 20px;color:#6b7280}.ei{font-size:36px;margin-bottom:8px}.footer{padding:10px 16px;border-top:1px solid #e2e8f0;flex-shrink:0}.exp{width:100%;padding:7px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;font-size:11px;cursor:pointer;color:#374151;margin-bottom:6px}.exp:hover{background:#0f172a;color:#fff;border-color:#0f172a}.prv{font-size:10px;color:#9ca3af;text-align:center}</style>'
+      +'<div class="hd"><div><div class="hd-t">designSense</div><div class="hd-s">27 dark patterns · 10 heuristics · accessibility</div></div><div style="display:flex;gap:0;align-items:center"><button class="min" id="dv-min" title="Minimize" aria-label="Minimize"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="12" height="12" rx="3"/><line x1="4" y1="9.5" x2="10" y2="9.5"/></svg></button><button class="cls" id="dv-close" aria-label="Close">&#x2715;</button></div></div>'
+      +'<div class="sum"><div class="sum-hd">'+total+' violation'+(total!==1?'s':'')+' found</div><div class="bgs" id="dv-badges">'+badgeHtml+'</div>'+(total>0?'<button type="button" class="clf" id="dv-clear-sev" style="display:none">Clear severity filter &#x2715;</button>':'')+'</div>'
+      +'<div class="tabs"><button class="tab on" data-tab="all">All ('+total+')</button><button class="tab" data-tab="deceptive">Dark Patterns ('+deceptive.length+')</button><button class="tab" data-tab="heuristic">Heuristics ('+heuristics.length+')</button><button class="tab" data-tab="accessibility">Accessibility ('+accessibility.length+')</button></div>'
       +'<div class="list" id="dv-list"></div>'
       +'<div class="footer"><button class="exp" id="dv-export">Copy full report as JSON</button><div class="prv">No data leaves your browser &middot; Shadow DOM isolated &middot; Read-only</div></div>';
 
     shadow.appendChild(panel);
 
-    var activeTab='all', highlightedEl=null;
+    var activeTab='all', activeSeverity=null, highlightedEl=null;
+    // The exact groups array used for the list currently on screen. Jump clicks must read
+    // from this frozen snapshot, not recompute groups fresh — regrouping re-checks which
+    // elements are still attached to the page, and on a dynamic page that check can return a
+    // different answer by the time a later chip is clicked, silently shifting indices.
+    var renderedGroups=[];
 
     function getFiltered(tab) {
-      return tab==='deceptive'?deceptive:tab==='heuristic'?heuristics:issues;
+      var list = tab==='deceptive'?deceptive:tab==='heuristic'?heuristics:tab==='accessibility'?accessibility:issues;
+      if (activeSeverity) list = list.filter(function(i){return i.severity===activeSeverity;});
+      return list;
+    }
+
+    // Multiple elements very often fail the exact same check for the exact same reason.
+    // Reported one card per element, these read as duplicates. Group by identical
+    // category+type+message into a single card that lists every affected element as its
+    // own jump target instead.
+    function groupIssues(list) {
+      var map={}, order=[];
+      list.forEach(function(issue){
+        var key=issue.category+'|'+issue.type+'|'+issue.message;
+        if(!map[key]){
+          map[key]={category:issue.category,type:issue.type,severity:issue.severity,message:issue.message,recommendation:issue.recommendation,confidence:issue.confidence,count:0,els:[]};
+          order.push(key);
+        }
+        var g=map[key];
+        g.count++;
+        if(issue.el&&issue.el!==document.body&&document.body.contains(issue.el)&&g.els.indexOf(issue.el)===-1){
+          g.els.push(issue.el);
+        }
+      });
+      return order.map(function(k){return map[k];});
+    }
+
+    function getGroups(tab) {
+      return groupIssues(getFiltered(tab));
     }
 
     function renderList(tab) {
       var listEl=shadow.getElementById('dv-list');
-      var filtered=getFiltered(tab);
-      if(!filtered.length){
-        listEl.innerHTML='<div class="empty"><div class="ei">&#10003;</div><strong>No issues in this category</strong><p style="margin-top:6px;font-size:11px">This section looks clean!</p></div>';
+      var groups=getGroups(tab);
+      renderedGroups=groups;
+      if(!groups.length){
+        var emptyTitle = activeSeverity ? ('No '+esc(activeSeverity)+' issues in this category') : 'No issues in this category';
+        var emptySub = activeSeverity ? 'Try a different severity or clear the filter.' : 'This section looks clean!';
+        listEl.innerHTML='<div class="empty"><div class="ei">&#10003;</div><strong>'+emptyTitle+'</strong><p style="margin-top:6px;font-size:11px">'+emptySub+'</p></div>';
         return;
       }
-      listEl.innerHTML=filtered.map(function(issue,i){
-        var cc=issue.confidence==='high'?'ch':issue.confidence==='best-effort'?'cbe':'cm3';
-        var cl=issue.confidence==='high'?'&#10003; High confidence':issue.confidence==='best-effort'?'&#9888; Best effort':'~ Medium confidence';
-        var rect=issue.el?issue.el.getBoundingClientRect():null;
-        var canJump=issue.el&&issue.el!==document.body&&rect&&(rect.width>0||rect.height>0);
+      listEl.innerHTML=groups.map(function(g,i){
+        var cc=g.confidence==='high'?'ch':g.confidence==='medium'?'cm':'cb';
+        var cl=g.confidence==='high'?'&#10003; Very likely a real issue':g.confidence==='medium'?'~ Probably a real issue':'&#9888; Worth double-checking';
+        var preview=g.message.length>68?g.message.substring(0,68)+'…':g.message;
+        var countBadge=g.count>1?(' <span class="cnt">&times; '+g.count+'</span>'):'';
+        var jumpHtml='';
+        if(g.els.length===1){
+          jumpHtml='<div class="jr"><button class="jmp" data-jump="'+i+'" data-tab="'+tab+'" data-el="0">&#8599; Jump to element</button></div>';
+        } else if(g.els.length>1){
+          jumpHtml='<div class="jr"><span class="jrl">Jump to instance:</span>'+g.els.map(function(_,ei){
+            return '<button class="jmpn" data-jump="'+i+'" data-tab="'+tab+'" data-el="'+ei+'">'+(ei+1)+'</button>';
+          }).join('')+'</div>';
+        }
         return '<div class="card" data-i="'+i+'" data-tab="'+tab+'">'
-          +'<div class="ct"><div class="dot" style="background:'+sevColor(issue.severity)+'"></div>'
-          +'<div style="flex:1"><div class="ci">'+esc(issue.type)+'</div><div class="cm2">'+esc(issue.category)+' &middot; '+esc(issue.severity)+'</div></div></div>'
-          +'<div class="cb2"><div class="msg">'+esc(issue.message)+'</div><div class="rec">Fix: '+esc(issue.recommendation)+'</div>'
-          +'<div class="fr"><span class="conf '+cc+'">'+cl+'</span>'
-          +(canJump?'<button class="jmp" data-jump="'+i+'" data-tab="'+tab+'">&#8599; Jump to element</button>':'')
-          +'</div></div></div>';
+          +'<div class="ct"><div class="dot" style="background:'+sevColor(g.severity)+'"></div>'
+          +'<div style="flex:1"><div class="ci">'+esc(g.type)+countBadge+'</div><div class="cm2">'+esc(g.category)+' &middot; '+esc(g.severity)+'</div><div class="cpv">'+esc(preview)+'</div></div></div>'
+          +'<div class="cb2"><div class="msg">'+esc(g.message)+(g.count>1?' <em>(found on '+g.count+' elements)</em>':'')+'</div><div class="rec">Fix: '+esc(g.recommendation)+'</div>'
+          +'<div class="fr"><span class="conf '+cc+'">'+cl+'</span></div>'
+          +jumpHtml
+          +'</div></div>';
       }).join('');
     }
 
@@ -927,19 +1173,57 @@
       });
     });
 
+    function setSeverityFilter(sev) {
+      activeSeverity = sev;
+      var badgesEl = shadow.getElementById('dv-badges');
+      shadow.querySelectorAll('.badge[data-severity]').forEach(function(b){
+        var isOn = b.dataset.severity === activeSeverity;
+        b.classList.toggle('on', isOn);
+        b.setAttribute('aria-pressed', String(isOn));
+      });
+      if (badgesEl) badgesEl.classList.toggle('filtered', !!activeSeverity);
+      var clearBtn = shadow.getElementById('dv-clear-sev');
+      if (clearBtn) clearBtn.style.display = activeSeverity ? '' : 'none';
+      renderList(activeTab);
+    }
+    var badgesContainer = shadow.getElementById('dv-badges');
+    if (badgesContainer) {
+      badgesContainer.addEventListener('click', function(e){
+        var btn = e.target.closest('[data-severity]');
+        if (!btn) return;
+        setSeverityFilter(activeSeverity === btn.dataset.severity ? null : btn.dataset.severity);
+      });
+    }
+    var clearSevBtn = shadow.getElementById('dv-clear-sev');
+    if (clearSevBtn) {
+      clearSevBtn.addEventListener('click', function(){ setSeverityFilter(null); });
+    }
+
     shadow.getElementById('dv-list').addEventListener('click',function(e){
       var jumpBtn=e.target.closest('[data-jump]');
       if(jumpBtn){
         e.stopPropagation();
-        var idx=+jumpBtn.dataset.jump;
-        var issue=getFiltered(jumpBtn.dataset.tab)[idx];
-        if(issue&&issue.el){
+        var gIdx=+jumpBtn.dataset.jump;
+        var elIdx=jumpBtn.dataset.el?+jumpBtn.dataset.el:0;
+        var group=renderedGroups[gIdx];
+        var el=group&&group.els[elIdx];
+        if(el&&document.body.contains(el)){
           if(highlightedEl){highlightedEl.style.outline='';highlightedEl.style.outlineOffset='';}
-          highlightedEl=issue.el;
-          issue.el.style.outline='3px solid #6366f1';
-          issue.el.style.outlineOffset='2px';
-          issue.el.scrollIntoView({behavior:'smooth',block:'center'});
-          setTimeout(function(){if(highlightedEl===issue.el){issue.el.style.outline='';issue.el.style.outlineOffset='';}},3000);
+          highlightedEl=el;
+          el.style.outline='3px solid #6366f1';
+          el.style.outlineOffset='2px';
+          var targetRect=el.getBoundingClientRect();
+          var needsPeek=!dvMinimized&&targetRect.right>window.innerWidth-440;
+          if(needsPeek){panel.style.transition='opacity .2s';panel.style.opacity='0.15';}
+          el.scrollIntoView({behavior:'smooth',block:'center'});
+          setTimeout(function(){
+            if(highlightedEl===el){el.style.outline='';el.style.outlineOffset='';}
+            if(needsPeek)panel.style.opacity='1';
+          },3000);
+        } else {
+          jumpBtn.classList.add('stale');
+          jumpBtn.disabled = true;
+          jumpBtn.title = 'This element is no longer on the page — it may have been added or removed dynamically since the scan ran.';
         }
         return;
       }
@@ -951,8 +1235,8 @@
     });
 
     var dvMinimized=false;
-    shadow.getElementById('dv-min').addEventListener('click',function(){
-      dvMinimized=!dvMinimized;
+    function setMinimized(min){
+      dvMinimized=min;
       var btn=shadow.getElementById('dv-min');
       var secs=[shadow.querySelector('.sum'),shadow.querySelector('.tabs'),shadow.getElementById('dv-list'),shadow.querySelector('.footer')];
       if(dvMinimized){
@@ -972,7 +1256,8 @@
         btn.innerHTML='<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="12" height="12" rx="3"/><line x1="4" y1="9.5" x2="10" y2="9.5"/></svg>';
         btn.title='Minimize';btn.setAttribute('aria-label','Minimize');
       }
-    });
+    }
+    shadow.getElementById('dv-min').addEventListener('click',function(){ setMinimized(!dvMinimized); });
 
     shadow.getElementById('dv-close').addEventListener('click',function(){
       if(highlightedEl){highlightedEl.style.outline='';highlightedEl.style.outlineOffset='';}

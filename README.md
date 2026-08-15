@@ -11,7 +11,8 @@ A browser bookmarklet that audits AI-generated HTML and React prototypes for dec
 Click designSense on any prototype and get an instant report covering:
 
 - **27 dark patterns** across 7 academic categories (De Souza & Avelar, 2021)
-- **Nielsen's 10 usability heuristics** via DOM and CSS inspection
+- **10 usability heuristics** via DOM and CSS inspection (Nielsen Norman Group)
+- **13 accessibility checks** — WCAG-adjacent, screen reader & keyboard access
 - Severity level for every finding (Critical / High / Medium / Low)
 - A specific, actionable fix for each issue
 - One-click jump to the flagged element on the page
@@ -47,18 +48,40 @@ Click it again to dismiss. No refresh needed.
 
 ### Nielsen's 10 Heuristics
 
+Every one of Nielsen Norman Group's 10 heuristics is represented, per the [source PDF](https://www.nngroup.com/articles/ten-usability-heuristics/). Checks that map directly to a WCAG concern (contrast, labels, keyboard access, ARIA, etc.) are broken out into their own **Accessibility** category below instead of being buried inside a heuristic — so H8's checks, for example, all live there now.
+
 | Heuristic | Detection |
 |---|---|
 | H1 System Status | Loading states, progress indicators |
 | H2 Real World Match | Technical jargon in UI copy |
 | H3 User Control | Confirmation on destructive actions |
-| H4 Consistency | Heading hierarchy, single H1 |
+| H4 Consistency | Button style consistency |
 | H5 Error Prevention | Field types, required indicators |
-| H6 Recognition | Icon-only buttons, breadcrumbs |
-| H7 Flexibility | Skip link, search on long lists |
-| H8 Aesthetics | WCAG AA contrast, font scale |
+| H6 Recognition | Breadcrumb navigation |
+| H7 Flexibility | Search on long lists |
+| H8 Aesthetics | Tracked under Accessibility |
 | H9 Error Recovery | Generic error messages |
 | H10 Help | Password hints, empty state guidance |
+
+### Accessibility (13 checks)
+
+Its own numbering series (A1–A13) — deliberately not H-numbers, since these are cross-cutting WCAG concerns pulled out of several different heuristics, not one heuristic's sub-checks.
+
+| Check | Detection |
+|---|---|
+| A1 Live Regions | Form submits with no aria-live/status |
+| A2 Heading Structure | Skipped levels, multiple H1s |
+| A3 Keyboard Access | Clickable elements missing role/tabindex |
+| A4 Radio Groups | Missing fieldset/legend |
+| A5 Icon Labels | Icon-only buttons missing aria-label |
+| A6 Field Labels | Placeholder used as the only label |
+| A7 Skip Link | No skip-to-content link found |
+| A8 Autocomplete | Missing on email/name/phone fields |
+| A9 Color Contrast | WCAG AA text contrast ratio |
+| A10 Type Scale | Too many distinct font sizes |
+| A11 Color Palette | Too many distinct text colors |
+| A12 Error Association | Errors not linked via aria-describedby |
+| A13 Invalid Fields | aria-invalid with no visible error message |
 
 ---
 

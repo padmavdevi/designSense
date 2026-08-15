@@ -54,6 +54,13 @@
     return 'rgb(255, 255, 255)';
   }
 
+  // For page-level findings with no single "wrong" element (e.g. "no breadcrumbs anywhere"),
+  // point at the nearest relevant landmark instead of document.body so "Jump to element" has
+  // somewhere meaningful to go. Falls back to document.body if the page has no landmarks at all.
+  function pageAnchor() {
+    return document.querySelector('header') || document.querySelector('nav') || document.body;
+  }
+
   // Walk text nodes and flag pattern matches against their parent element
   // contextSelector (optional): only flag text found inside these UI container types.
   // Ensures we detect design patterns in live UI — not text that describes design patterns.
@@ -315,7 +322,14 @@
 
   // 13. DISGUISED ADS — ads styled as content or navigation
   function checkDisguisedAds() {
-    document.querySelectorAll('[class*="sponsored"],[class*="ad-"],[class*="-ad"],[data-ad]').forEach(el => {
+    // "ad" as a substring is a bad fingerprint on its own — it matches "grad-icon",
+    // "download-btn", "upload-area", "quad-core", etc. Require "ad"/"ads" as its own
+    // hyphen/underscore/space-delimited token so those false positives don't fire.
+    const adTokenPattern = /(^|[\s_-])ads?([\s_-]|$)/i;
+    document.querySelectorAll('[class*="ad"],[class*="sponsored"],[data-ad]').forEach(el => {
+      const cls = el.getAttribute('class') || '';
+      const isAdMarked = el.hasAttribute('data-ad') || /sponsored/i.test(cls) || adTokenPattern.test(cls);
+      if (!isAdMarked) return;
       const hasLabel = el.querySelector('[class*="label"],[class*="badge"],[aria-label]') ||
         /sponsored|advertisement|\bad\b/i.test(el.textContent.substring(0, 30));
       if (!hasLabel) {
@@ -337,10 +351,20 @@
 
   // 14. FAKE SOCIAL PROOF — unverified reviews, inflated numbers
   function checkFakeSocialProof() {
-    document.querySelectorAll('[class*="review"],[class*="testimonial"],[class*="rating"]').forEach(el => {
+    // Component libraries commonly apply the same class prefix (e.g. "testimonial") to every
+    // nested part of one card — the wrapper, the photo, the quote, the author block — not just
+    // the card itself. Matched naively, one visual testimonial can count as 5-10 "reviews".
+    // Keep only the outermost matched element per card, same as the modal-dedup logic above.
+    const candidates = Array.from(document.querySelectorAll('[class*="review"],[class*="testimonial"],[class*="rating"]'));
+    const cards = candidates.filter(el => !candidates.some(other => other !== el && other.contains(el)));
+    cards.forEach(el => {
       const hasVerified = /verified|purchase|confirmed|source/i.test(el.textContent);
       const hasDate = /\d{4}|\d+\s+(days?|weeks?|months?)\s+ago/i.test(el.textContent);
-      if (!hasVerified && !hasDate) {
+      // A named, titled person with a photo is itself a credible attribution — this doesn't
+      // need a literal "Verified" badge to be trustworthy the way an anonymous quote would.
+      const hasNamedAttribution = el.querySelector('img') &&
+        /\b(CEO|CTO|CFO|COO|Founder|Co-founder|President|Chairman|Director|Manager|VP|Vice President|Head|Lead|Owner|Partner|Principal|Chief)\b/i.test(el.textContent);
+      if (!hasVerified && !hasDate && !hasNamedAttribution) {
         addIssue('Deceptive Pattern', 'Fake Social Proof', 'Medium', el,
           'Review or testimonial lacks verification status and date',
           'Add verified purchase badge and timestamp to all reviews.',
@@ -447,24 +471,37 @@
     document.querySelectorAll('form').forEach(form => {
       const submit = form.querySelector('[type="submit"],button:not([type="button"]):not([type="reset"])');
       if (!submit) return;
+      // A loading state only exists at runtime, after submit — a static scan of the resting
+      // DOM can never confirm one is truly absent, only that none of the common markup
+      // conventions for one are present yet. This is a "worth checking by hand" signal, not
+      // a confirmed defect, so it's flagged at best-effort confidence, not high.
       const hasLoader =
-        form.querySelector('[class*="spinner"],[class*="loading"],[class*="loader"]') ||
-        submit.dataset.loading !== undefined ||
-        submit.getAttribute('aria-busy');
+        form.querySelector('[class*="spinner"],[class*="loading"],[class*="loader"],[class*="busy"],[class*="pending"],[class*="processing"]') ||
+        submit.dataset.loading !== undefined || submit.dataset.loadingText !== undefined ||
+        submit.hasAttribute('aria-busy') || submit.hasAttribute('aria-disabled');
       if (!hasLoader) {
         addIssue('Nielsen Heuristic', 'H1: System Status', 'Medium', submit,
-          'Submit button has no visible loading/processing state',
-          'Disable the button and show a spinner or "Processing…" label on submit to confirm the action was received.',
-          'high');
+          'No loading/processing markup found near this submit button',
+          'Verify by hand: click submit and confirm the button shows a spinner, "Processing…" label, or disabled state. This check can only see markup present before submit — a state added dynamically via JS at click time won\'t show up here.',
+          'best-effort');
       }
     });
-    const hasMultiStep = document.querySelectorAll('[class*="step"],[data-step],[class*="wizard"]').length > 1;
+    const stepEls = document.querySelectorAll('[class*="step"],[data-step],[class*="wizard"]');
     const hasProgress = document.querySelector('[class*="progress"],[role="progressbar"],[aria-valuenow]');
-    if (hasMultiStep && !hasProgress) {
-      addIssue('Nielsen Heuristic', 'H1: System Status', 'High', document.body,
+    if (stepEls.length > 1 && !hasProgress) {
+      addIssue('Nielsen Heuristic', 'H1: System Status', 'High', stepEls[0],
         'Multi-step flow detected but no progress indicator found',
         'Add a step counter ("Step 1 of 3") or progress bar so users always know where they are.',
         'medium');
+    }
+    const formsWithSubmit = Array.from(document.querySelectorAll('form'))
+      .filter(f => f.querySelector('[type="submit"],button:not([type="button"]):not([type="reset"])'));
+    const hasLiveRegion = document.querySelector('[aria-live],[role="status"],[role="alert"]');
+    if (formsWithSubmit.length > 0 && !hasLiveRegion) {
+      addIssue('Accessibility', 'A1: Live Regions', 'Low', formsWithSubmit[0],
+        'Page has form submissions but no aria-live, role="status", or role="alert" region anywhere',
+        'Add at least one live region so submit outcomes (success, failure, validation) are announced to screen reader users, not just shown visually.',
+        'best-effort');
     }
   }
 
@@ -482,6 +519,10 @@
           'best-effort');
       }
     });
+    scanText(/\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}|(?:TypeError|ReferenceError|SyntaxError):|at\s+Object\.|at\s+[\w$.]+\s+\(/,
+      'Nielsen Heuristic', 'H2: Real World Match', 'Medium', 'Raw technical output shown to users',
+      'Never surface ISO timestamps or stack traces directly. Format dates for humans and log errors server-side instead.',
+      'best-effort');
   }
 
   // H3: User Control & Freedom — HIGH CONFIDENCE
@@ -511,26 +552,40 @@
           'high');
       }
     });
+    document.querySelectorAll('[role="dialog"],[role="alertdialog"],[class*="modal"],[class*="popup"],[class*="overlay"],[class*="lightbox"]').forEach(el => {
+      const s = window.getComputedStyle(el);
+      if (s.display === 'none' || s.visibility === 'hidden' || parseFloat(s.opacity) === 0) return;
+      const rect = el.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+      const hasCloseAffordance = el.querySelector('[class*="close"],[aria-label*="close" i],[aria-label*="dismiss" i],[aria-label*="cancel" i]')
+        || /close|cancel|dismiss|got it|no thanks|×|✕|✖/i.test(el.textContent);
+      if (!hasCloseAffordance) {
+        addIssue('Nielsen Heuristic', 'H3: User Control', 'High', el,
+          'Modal or dialog has no visible close, cancel, or dismiss control',
+          'Give every dialog a clear "emergency exit" so users can back out of an unwanted action.',
+          'medium');
+      }
+    });
   }
 
   // H4: Consistency & Standards — HIGH CONFIDENCE
   function checkH4() {
     let prevLevel = 0;
-    let headingSkipped = false;
+    let skippedHeading = null;
     document.querySelectorAll('h1,h2,h3,h4,h5,h6').forEach(h => {
       const lvl = +h.tagName[1];
-      if (prevLevel > 0 && lvl > prevLevel + 1) headingSkipped = true;
+      if (prevLevel > 0 && lvl > prevLevel + 1 && !skippedHeading) skippedHeading = h;
       prevLevel = lvl;
     });
-    if (headingSkipped) {
-      addIssue('Nielsen Heuristic', 'H4: Consistency', 'Medium', document.body,
-        'Heading levels are skipped (e.g. H1 → H3)',
+    if (skippedHeading) {
+      addIssue('Accessibility', 'A2: Heading Structure', 'Medium', skippedHeading,
+        `Heading levels are skipped (jumps to <${skippedHeading.tagName.toLowerCase()}> here)`,
         'Use sequential heading levels. Skipping levels breaks screen reader navigation.',
         'high');
     }
     const h1s = document.querySelectorAll('h1');
     if (h1s.length > 1) {
-      addIssue('Nielsen Heuristic', 'H4: Consistency', 'Medium', h1s[1],
+      addIssue('Accessibility', 'A2: Heading Structure', 'Medium', h1s[1],
         `${h1s.length} H1 elements on page — only one should exist`,
         'Use a single H1 as the primary page title. Use H2–H6 for sections.',
         'high');
@@ -548,6 +603,13 @@
         'Standardise button styles using a design system. Inconsistent buttons confuse users.',
         'medium');
     }
+    document.querySelectorAll('div[onclick],span[onclick]').forEach(el => {
+      if (el.getAttribute('role') === 'button' || el.hasAttribute('tabindex')) return;
+      addIssue('Accessibility', 'A3: Keyboard Access', 'Medium', el,
+        'Non-interactive element has an onclick handler but no role="button" or tabindex',
+        'Use a real <button> or <a>, or add role="button" and tabindex="0" — keyboard and screen-reader users can\'t reach a div/span the platform doesn\'t recognize as interactive.',
+        'high');
+    });
   }
 
   // H5: Error Prevention — HIGH CONFIDENCE
@@ -563,11 +625,27 @@
       // Required fields without a visual marker
       if (el.required) {
         const label = document.querySelector(`label[for="${el.id}"]`) || el.closest('label');
-        if (label && !/\*|required/i.test(label.textContent)) {
-          addIssue('Nielsen Heuristic', 'H5: Error Prevention', 'Medium', el,
-            'Required field has no visual indicator (* or "Required")',
-            'Mark required fields with * and explain the convention at the top of the form.',
-            'high');
+        if (label) {
+          const markerPattern = /\*|required/i;
+          // The "*" is often not literal text inside the <label> — it's commonly a sibling
+          // element (a separate span pushed to the row's far edge, e.g. justify-content:
+          // space-between) or pure CSS ::before/::after content, neither of which shows up
+          // in label.textContent. Check the label's immediate wrapper and computed
+          // pseudo-element content too before concluding there's no marker at all.
+          const wrapper = label.parentElement;
+          const pseudoContent = (node, pseudo) => node ? window.getComputedStyle(node, pseudo).content : '';
+          const hasMarker = markerPattern.test(label.textContent) ||
+            (wrapper && markerPattern.test(wrapper.textContent)) ||
+            markerPattern.test(pseudoContent(label, '::before')) ||
+            markerPattern.test(pseudoContent(label, '::after')) ||
+            markerPattern.test(pseudoContent(wrapper, '::before')) ||
+            markerPattern.test(pseudoContent(wrapper, '::after'));
+          if (!hasMarker) {
+            addIssue('Nielsen Heuristic', 'H5: Error Prevention', 'Medium', el,
+              'Required field has no visual indicator (* or "Required")',
+              'Mark required fields with * and explain the convention at the top of the form.',
+              'high');
+          }
         }
       }
       // Password with no show/hide
@@ -585,6 +663,22 @@
         }
       }
     });
+    const radioGroups = {};
+    document.querySelectorAll('input[type="radio"][name]').forEach(el => {
+      (radioGroups[el.name] = radioGroups[el.name] || []).push(el);
+    });
+    Object.keys(radioGroups).forEach(name => {
+      const group = radioGroups[name];
+      if (group.length < 2) return;
+      const fieldset = group[0].closest('fieldset');
+      const hasLegend = fieldset && fieldset.querySelector('legend');
+      if (!hasLegend) {
+        addIssue('Accessibility', 'A4: Radio Groups', 'Medium', group[0],
+          `Radio group "${name}" has no <fieldset>/<legend> grouping`,
+          'Wrap related radio options in a <fieldset> with a <legend> describing the choice — without it, screen reader users can\'t tell the options are related.',
+          'high');
+      }
+    });
   }
 
   // H6: Recognition Rather than Recall — HIGH CONFIDENCE
@@ -594,7 +688,7 @@
       const hasLabel = el.getAttribute('aria-label') || el.getAttribute('title');
       const hasIcon = el.querySelector('svg,img,i,[class*="icon"]');
       if (hasIcon && !hasText && !hasLabel) {
-        addIssue('Nielsen Heuristic', 'H6: Recognition', 'High', el,
+        addIssue('Accessibility', 'A5: Icon Labels', 'High', el,
           'Icon-only button with no accessible label (missing aria-label or title)',
           'Add aria-label to every icon-only button. Icons alone are ambiguous without labels.',
           'high');
@@ -605,12 +699,25 @@
     if (window.location.protocol !== 'file:') {
       const depth = window.location.pathname.split('/').filter(Boolean).length;
       if (depth > 2 && !document.querySelector('[aria-label*="breadcrumb"],[class*="breadcrumb"]')) {
-        addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', document.body,
+        addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', pageAnchor(),
           'Deep page URL but no breadcrumb navigation found',
           'Add breadcrumbs on deep pages so users know where they are and can navigate up the hierarchy.',
           'medium');
       }
     }
+    document.querySelectorAll('input,textarea').forEach(el => {
+      if (['hidden', 'submit', 'button', 'checkbox', 'radio'].includes(el.type)) return;
+      const hasPlaceholder = el.placeholder && el.placeholder.trim().length > 0;
+      if (!hasPlaceholder) return;
+      const hasLabel = (el.id && document.querySelector(`label[for="${el.id}"]`)) || el.closest('label') ||
+        el.getAttribute('aria-label') || el.getAttribute('aria-labelledby');
+      if (!hasLabel) {
+        addIssue('Accessibility', 'A6: Field Labels', 'High', el,
+          `Field relies on placeholder text as its only label ("${el.placeholder.substring(0, 40)}")`,
+          'Add a visible <label>. Placeholder text disappears the moment the user starts typing, forcing them to recall what the field was for.',
+          'high');
+      }
+    });
   }
 
   // H7: Flexibility & Efficiency of Use — BEST EFFORT
@@ -619,21 +726,41 @@
       'a[href="#main"],a[href="#content"],a[href="#maincontent"],a[href="#main-content"],[class*="skip-"]'
     );
     if (!skipLink) {
-      addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Medium', document.body,
+      addIssue('Accessibility', 'A7: Skip Link', 'Medium', pageAnchor(),
         'No skip-to-content link found',
         'Add a visually hidden "Skip to main content" as the first focusable element — essential for keyboard users.',
         'high');
     }
-    const listCount = Array.from(document.querySelectorAll('li,tr,[class*="card"],[class*="item"]'))
-      .filter(el => !el.closest('[data-ds-ignore]')).length;
-    const longList = listCount > 20;
+    const longListEls = Array.from(document.querySelectorAll('li,tr,[class*="card"],[class*="item"]'))
+      .filter(el => !el.closest('[data-ds-ignore]'));
     const hasSearch = document.querySelector('[type="search"],[role="search"],[class*="search-input"]');
-    if (longList && !hasSearch) {
-      addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Low', document.body,
+    if (longListEls.length > 20 && !hasSearch) {
+      addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Low', longListEls[0],
         'Long list/grid with no search or filter control',
         'Add search or filter to help power users find items quickly without scrolling everything.',
         'best-effort');
     }
+    const autocompleteChecks = [
+      { test: /email/i, token: 'email' },
+      { test: /^(first.?name|fname|given.?name)$/i, token: 'given-name' },
+      { test: /^(last.?name|lname|surname|family.?name)$/i, token: 'family-name' },
+      { test: /^(full.?name|name)$/i, token: 'name' },
+      { test: /phone|tel/i, token: 'tel' }
+    ];
+    document.querySelectorAll('input').forEach(el => {
+      const ac = el.getAttribute('autocomplete');
+      if (ac && ac !== 'off' && ac !== '') return;
+      const probe = `${el.name || ''} ${el.id || ''}`;
+      for (const check of autocompleteChecks) {
+        if (check.test.test(probe)) {
+          addIssue('Accessibility', 'A8: Autocomplete', 'Low', el,
+            `Field looks like "${check.token}" but has no autocomplete attribute`,
+            `Add autocomplete="${check.token}" so browsers and password managers can fill it automatically for returning users.`,
+            'best-effort');
+          break;
+        }
+      }
+    });
   }
 
   // H8: Aesthetic & Minimalist Design — HIGH CONFIDENCE
@@ -643,6 +770,7 @@
 
     document.querySelectorAll('p,span,label,a,button,h1,h2,h3,h4,h5,h6,li,td').forEach(el => {
       if (el.children.length > 0 || reported.has(el)) return;
+      if (!el.textContent.trim()) return; // no visible text — nothing for "contrast" to apply to
       const s = window.getComputedStyle(el);
       const bg = effectiveBackground(el);
       const ratio = contrastRatio(s.color, bg);
@@ -654,40 +782,56 @@
         lowContrastCount++;
         reported.add(el);
         if (lowContrastCount <= 5) {
-          addIssue('Nielsen Heuristic', 'H8: Aesthetics', ratio < 2 ? 'Critical' : 'High', el,
-            `Contrast ratio ${ratio.toFixed(1)}:1 (WCAG AA minimum ${minRatio}:1)`,
-            `Increase contrast. Text: ${s.color} on ${bg}`,
+          const snippet = el.textContent.trim().slice(0, 40);
+          const tag = el.tagName.toLowerCase();
+          addIssue('Accessibility', 'A9: Color Contrast', ratio < 2 ? 'Critical' : 'High', el,
+            `Contrast ratio ${ratio.toFixed(1)}:1 on this <${tag}>: "${snippet}" (WCAG AA minimum ${minRatio}:1)`,
+            `Darken the text or lighten the background on this <${tag}> element until it reaches ${minRatio}:1. Currently ${s.color} text on ${bg} background.`,
             'high');
         }
       }
     });
 
     if (lowContrastCount > 5) {
-      addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'High', document.body,
+      addIssue('Accessibility', 'A9: Color Contrast', 'High', document.body,
         `${lowContrastCount} total low-contrast text elements (showing first 5 above)`,
         'Run a full WCAG AA contrast audit across all text in this design.',
         'high');
     }
 
-    // Too many font sizes = no type scale
+    // Too many font sizes = no type scale; too many text colors = no color system
     const fontSizes = new Set();
+    const textColors = new Set();
     const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE']);
     document.body.querySelectorAll('*').forEach(el => {
       if (SKIP_TAGS.has(el.tagName) || el.closest('script,style,noscript,template')) return;
       if (el.children.length || !el.textContent.trim() || el.getClientRects().length === 0) return;
-      fontSizes.add(window.getComputedStyle(el).fontSize);
+      const cs = window.getComputedStyle(el);
+      fontSizes.add(cs.fontSize);
+      textColors.add(cs.color);
     });
     if (fontSizes.size > 8) {
-      addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'Low', document.body,
+      addIssue('Accessibility', 'A10: Type Scale', 'Low', document.body,
         `${fontSizes.size} distinct font sizes in use`,
         'Limit to 4–6 type scale steps. Too many sizes signal no consistent design system.',
+        'high');
+    }
+    if (textColors.size > 10) {
+      addIssue('Accessibility', 'A11: Color Palette', 'Low', document.body,
+        `${textColors.size} distinct text colors in use`,
+        'Limit text colors to a small, deliberate palette (ink, muted, accent, semantic colors). Too many distinct colors signal no consistent visual system.',
         'high');
     }
   }
 
   // H9: Help Users Recognize, Diagnose & Recover from Errors — BEST EFFORT
   function checkH9() {
-    document.querySelectorAll('[class*="error"],[class*="alert"],[role="alert"],[aria-live]').forEach(el => {
+    // Same class-prefix over-matching risk as testimonials/reviews: an alert/error wrapper
+    // and its nested icon, message, and dismiss-button elements can all independently match
+    // [class*="alert"]/[class*="error"]. Keep only the outermost matched element per group.
+    const errorCandidates = Array.from(document.querySelectorAll('[class*="error"],[class*="alert"],[role="alert"],[aria-live]'));
+    const errorEls = errorCandidates.filter(el => !errorCandidates.some(other => other !== el && other.contains(el)));
+    errorEls.forEach(el => {
       if (/something\s+went\s+wrong|an?\s+error\s+(has\s+)?occurred|oops|try\s+again\s+later/i.test(el.textContent)) {
         addIssue('Nielsen Heuristic', 'H9: Error Recovery', 'High', el,
           `Generic error message: "${el.textContent.trim().substring(0, 60)}"`,
@@ -698,9 +842,22 @@
       const isLinkedToField = el.id && document.querySelector(`[aria-describedby="${el.id}"]`);
       const isInlineWithField = el.closest('label,fieldset,[class*="field"],[class*="form-group"]');
       if (!isLinkedToField && !isInlineWithField) {
-        addIssue('Nielsen Heuristic', 'H9: Error Recovery', 'Medium', el,
+        addIssue('Accessibility', 'A12: Error Association', 'Medium', el,
           'Error element not associated with a specific input field',
           'Use aria-describedby to link errors to fields. Place errors immediately adjacent to the failing input.',
+          'medium');
+      }
+    });
+    document.querySelectorAll('[aria-invalid="true"]').forEach(el => {
+      const describedBy = el.getAttribute('aria-describedby');
+      const describedEl = describedBy && document.getElementById(describedBy);
+      const hasDescribedText = describedEl && describedEl.textContent.trim().length > 0;
+      const parent = el.closest('div,fieldset,[class*="field"],[class*="form-group"]');
+      const hasNearbyErrorText = parent && parent.querySelector('[class*="error"],[class*="invalid"],[role="alert"]');
+      if (!hasDescribedText && !hasNearbyErrorText) {
+        addIssue('Accessibility', 'A13: Invalid Fields', 'High', el,
+          'Field is marked aria-invalid but has no visible error message linked to it',
+          'A red border or aria-invalid flag alone isn\'t diagnosable. Add visible error text near the field and link it with aria-describedby.',
           'medium');
       }
     });
@@ -730,6 +887,18 @@
             'best-effort');
         }
       });
+    });
+    document.querySelectorAll('form').forEach(form => {
+      const requiredCount = form.querySelectorAll('[required]').length;
+      if (requiredCount >= 8) {
+        const hasHelp = form.querySelector('[class*="tooltip"],[class*="hint"],[class*="help"],[aria-describedby]');
+        if (!hasHelp) {
+          addIssue('Nielsen Heuristic', 'H10: Help', 'Low', form,
+            `Form has ${requiredCount} required fields but no help text, hints, or tooltips anywhere`,
+            'Long forms benefit from inline guidance. Add hint text or tooltips for fields whose expected input isn\'t obvious.',
+            'best-effort');
+        }
+      }
     });
   }
 
@@ -806,6 +975,7 @@
 
     const deceptive = issues.filter(i => i.category === 'Deceptive Pattern');
     const heuristics = issues.filter(i => i.category === 'Nielsen Heuristic');
+    const accessibility = issues.filter(i => i.category === 'Accessibility');
 
 
     const panel = document.createElement('div');
@@ -844,8 +1014,14 @@
         .score-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
         .score-num{font-size:26px;font-weight:800}
         .score-label{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
-        .badges{display:flex;gap:6px;flex-wrap:wrap}
-        .badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;color:#fff}
+        .badges{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+        .badge{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:12px;font-size:11px;font-weight:600;color:#fff;border:none;font-family:inherit;cursor:default}
+        .badge[data-severity]{cursor:pointer;transition:opacity .15s,box-shadow .15s}
+        .badge[data-severity]:hover{opacity:.85}
+        .badge[data-severity].on{box-shadow:0 0 0 2px rgba(15,23,42,.6)}
+        .badges.filtered .badge[data-severity]:not(.on){opacity:.4}
+        .clear-filter{font-size:10px;color:#6366f1;background:none;border:none;cursor:pointer;font-family:inherit;padding:2px 0;text-decoration:underline}
+        .clear-filter:hover{color:#4338ca}
         .bar{height:4px;background:#e2e8f0;border-radius:2px;overflow:hidden;margin-top:8px}
         .bar-fill{height:100%;border-radius:2px;transition:width .4s}
 
@@ -863,6 +1039,7 @@
         .dot{width:8px;min-width:8px;height:8px;border-radius:50%;margin-top:4px}
         .card-title{font-size:12px;font-weight:600;color:#1f2937;flex:1}
         .card-meta{font-size:10px;color:#6b7280;margin-top:1px}
+        .card-preview{font-size:11px;color:#374151;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
         .card-body{display:none;margin-top:8px;padding-top:8px;border-top:1px solid #f1f5f9}
         .card.open .card-body{display:block}
         .msg{font-size:11px;color:#374151;margin-bottom:6px;word-break:break-word}
@@ -872,8 +1049,15 @@
         .ch{background:#dcfce7;color:#15803d}
         .cm{background:#e0f2fe;color:#0369a1}
         .cb{background:#fef9c3;color:#854d0e}
-        .jump{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;color:#374151;cursor:pointer;margin-left:auto}
+        .jump{font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;color:#374151;cursor:pointer}
         .jump:hover{background:#6366f1;color:#fff;border-color:#6366f1}
+        .card-count{font-size:11px;font-weight:600;color:#6366f1;background:#eef2ff;padding:1px 6px;border-radius:8px}
+        .jump-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:6px}
+        .jump-multi-label{font-size:10px;color:#6b7280;margin-right:2px}
+        .jump-n{font-size:10px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;border:1px solid #e2e8f0;background:#f8fafc;color:#374151;cursor:pointer}
+        .jump-n:hover{background:#6366f1;color:#fff;border-color:#6366f1}
+        .jump.stale,.jump-n.stale{opacity:.4;text-decoration:line-through;cursor:not-allowed;background:#f8fafc;color:#374151}
+        .jump.stale:hover,.jump-n.stale:hover{background:#f8fafc;color:#374151;border-color:#e2e8f0}
 
         .empty{text-align:center;padding:40px 20px;color:#6b7280}
         .empty-icon{font-size:36px;margin-bottom:8px}
@@ -887,7 +1071,7 @@
       <div class="hd">
         <div>
           <div class="hd-title">designSense</div>
-          <div class="hd-sub">18 dark patterns · Nielsen's 10 heuristics</div>
+          <div class="hd-sub">27 dark patterns · 10 heuristics · accessibility</div>
         </div>
         <div style="display:flex;gap:0;align-items:center">
           <button class="minimize" id="dv-min" title="Minimize" aria-label="Minimize"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="12" height="12" rx="3"/><line x1="4" y1="9.5" x2="10" y2="9.5"/></svg></button>
@@ -897,18 +1081,20 @@
 
       <div class="summary">
         <div style="font-size:12px;font-weight:700;color:#1f2937;margin-bottom:8px">${total} violation${total !== 1 ? 's' : ''} found</div>
-        <div class="badges">
+        <div class="badges" id="dv-badges">
           ${Object.entries(counts).filter(([, v]) => v > 0).map(([k, v]) =>
-            `<span class="badge" style="background:${severityColor(k)}">${v} ${escapeHtml(k)}</span>`
+            `<button type="button" class="badge" data-severity="${k}" style="background:${severityColor(k)}" aria-pressed="false">${v} ${escapeHtml(k)}</button>`
           ).join('')}
           ${total === 0 ? '<span class="badge" style="background:#16a34a">✓ No issues found</span>' : ''}
         </div>
+        ${total > 0 ? '<button type="button" class="clear-filter" id="dv-clear-sev" style="display:none">Clear severity filter ✕</button>' : ''}
       </div>
 
       <div class="tabs">
         <button class="tab on" data-tab="all">All (${total})</button>
         <button class="tab" data-tab="deceptive">Dark Patterns (${deceptive.length})</button>
         <button class="tab" data-tab="heuristic">Heuristics (${heuristics.length})</button>
+        <button class="tab" data-tab="accessibility">Accessibility (${accessibility.length})</button>
       </div>
 
       <div class="list" id="dv-list"></div>
@@ -922,51 +1108,102 @@
     shadow.appendChild(panel);
 
     let activeTab = 'all';
+    let activeSeverity = null;
     let highlightedEl = null;
+    // The exact groups array used for the list currently on screen. Jump clicks must read
+    // from this frozen snapshot, not recompute groups fresh — regrouping re-checks which
+    // elements are still attached to the page, and on a dynamic page that check can return a
+    // different answer by the time a later chip is clicked, silently shifting indices.
+    let renderedGroups = [];
 
     function getFilteredIssues(tab) {
-      if (tab === 'deceptive') return deceptive;
-      if (tab === 'heuristic') return heuristics;
-      return issues;
+      let list = tab === 'deceptive' ? deceptive
+        : tab === 'heuristic' ? heuristics
+        : tab === 'accessibility' ? accessibility
+        : issues;
+      if (activeSeverity) list = list.filter(i => i.severity === activeSeverity);
+      return list;
+    }
+
+    // Multiple elements very often fail the exact same check for the exact same reason
+    // (every "Sale" badge on a listing page using the same low-contrast color, every product
+    // card missing the same aria-live region, etc). Reported one card per element, these read
+    // as duplicates. Group by identical category+type+message into a single card that lists
+    // every affected element as its own jump target instead.
+    function groupIssues(list) {
+      const map = new Map();
+      const order = [];
+      list.forEach(issue => {
+        const key = issue.category + '|' + issue.type + '|' + issue.message;
+        if (!map.has(key)) {
+          map.set(key, {
+            category: issue.category, type: issue.type, severity: issue.severity,
+            message: issue.message, recommendation: issue.recommendation, confidence: issue.confidence,
+            count: 0, els: []
+          });
+          order.push(key);
+        }
+        const g = map.get(key);
+        g.count++;
+        if (issue.el && issue.el !== document.body && document.body.contains(issue.el) && g.els.indexOf(issue.el) === -1) {
+          g.els.push(issue.el);
+        }
+      });
+      return order.map(k => map.get(k));
+    }
+
+    function getGroupsForTab(tab) {
+      return groupIssues(getFilteredIssues(tab));
     }
 
     function renderList(tab) {
       const listEl = shadow.getElementById('dv-list');
-      const filtered = getFilteredIssues(tab);
+      const groups = getGroupsForTab(tab);
+      renderedGroups = groups;
 
-      if (filtered.length === 0) {
+      if (groups.length === 0) {
+        const title = activeSeverity ? `No ${activeSeverity} issues in this category` : 'No issues in this category';
         listEl.innerHTML = `
           <div class="empty">
             <div class="empty-icon">✓</div>
-            <strong>No issues in this category</strong>
-            <p style="margin-top:6px;font-size:11px">This section looks clean!</p>
+            <strong>${escapeHtml(title)}</strong>
+            <p style="margin-top:6px;font-size:11px">${activeSeverity ? 'Try a different severity or clear the filter.' : 'This section looks clean!'}</p>
           </div>`;
         return;
       }
 
-      listEl.innerHTML = filtered.map((issue, i) => {
-        const confClass = issue.confidence === 'high' ? 'ch' : issue.confidence === 'best-effort' ? 'cb' : 'cm';
-        const confLabel = issue.confidence === 'high' ? '✓ High confidence'
-          : issue.confidence === 'best-effort' ? '⚠ Best effort'
-          : '~ Medium confidence';
-        const rect = issue.el ? issue.el.getBoundingClientRect() : null;
-        const canJump = issue.el && issue.el !== document.body && rect && (rect.width > 0 || rect.height > 0);
+      listEl.innerHTML = groups.map((g, i) => {
+        const confClass = g.confidence === 'high' ? 'ch' : g.confidence === 'medium' ? 'cm' : 'cb';
+        const confLabel = g.confidence === 'high' ? '✓ Very likely a real issue'
+          : g.confidence === 'medium' ? '~ Probably a real issue'
+          : '⚠ Worth double-checking';
+        const preview = g.message.length > 68 ? g.message.slice(0, 68) + '…' : g.message;
+        const countBadge = g.count > 1 ? ` <span class="card-count">× ${g.count}</span>` : '';
+        let jumpHtml = '';
+        if (g.els.length === 1) {
+          jumpHtml = `<div class="jump-row"><button class="jump" data-jump="${i}" data-tab="${tab}" data-el="0">↗ Jump to element</button></div>`;
+        } else if (g.els.length > 1) {
+          jumpHtml = `<div class="jump-row"><span class="jump-multi-label">Jump to instance:</span>${
+            g.els.map((_, ei) => `<button class="jump-n" data-jump="${i}" data-tab="${tab}" data-el="${ei}">${ei + 1}</button>`).join('')
+          }</div>`;
+        }
         return `
           <div class="card" data-i="${i}" data-tab="${tab}">
             <div class="card-top">
-              <div class="dot" style="background:${severityColor(issue.severity)}"></div>
+              <div class="dot" style="background:${severityColor(g.severity)}"></div>
               <div style="flex:1">
-                <div class="card-title">${escapeHtml(issue.type)}</div>
-                <div class="card-meta">${escapeHtml(issue.category)} · ${escapeHtml(issue.severity)}</div>
+                <div class="card-title">${escapeHtml(g.type)}${countBadge}</div>
+                <div class="card-meta">${escapeHtml(g.category)} · ${escapeHtml(g.severity)}</div>
+                <div class="card-preview">${escapeHtml(preview)}</div>
               </div>
             </div>
             <div class="card-body">
-              <div class="msg">${escapeHtml(issue.message)}</div>
-              <div class="rec">Fix: ${escapeHtml(issue.recommendation)}</div>
+              <div class="msg">${escapeHtml(g.message)}${g.count > 1 ? ` <em>(found on ${g.count} elements)</em>` : ''}</div>
+              <div class="rec">Fix: ${escapeHtml(g.recommendation)}</div>
               <div class="foot-row">
                 <span class="conf ${confClass}">${confLabel}</span>
-                ${canJump ? `<button class="jump" data-jump="${i}" data-tab="${tab}">↗ Jump to element</button>` : ''}
               </div>
+              ${jumpHtml}
             </div>
           </div>`;
       }).join('');
@@ -982,29 +1219,79 @@
       });
     });
 
+    // Severity badges — click to filter the list, click again to clear
+    function setSeverityFilter(sev) {
+      activeSeverity = sev;
+      const badgesEl = shadow.getElementById('dv-badges');
+      shadow.querySelectorAll('.badge[data-severity]').forEach(b => {
+        const isOn = b.dataset.severity === activeSeverity;
+        b.classList.toggle('on', isOn);
+        b.setAttribute('aria-pressed', String(isOn));
+      });
+      if (badgesEl) badgesEl.classList.toggle('filtered', !!activeSeverity);
+      const clearBtn = shadow.getElementById('dv-clear-sev');
+      if (clearBtn) clearBtn.style.display = activeSeverity ? '' : 'none';
+      renderList(activeTab);
+    }
+    const badgesContainer = shadow.getElementById('dv-badges');
+    if (badgesContainer) {
+      badgesContainer.addEventListener('click', e => {
+        const btn = e.target.closest('[data-severity]');
+        if (!btn) return;
+        setSeverityFilter(activeSeverity === btn.dataset.severity ? null : btn.dataset.severity);
+      });
+    }
+    const clearSevBtn = shadow.getElementById('dv-clear-sev');
+    if (clearSevBtn) {
+      clearSevBtn.addEventListener('click', () => setSeverityFilter(null));
+    }
+
     // Card expand / jump
     shadow.getElementById('dv-list').addEventListener('click', e => {
       // Jump to element
       const jumpBtn = e.target.closest('[data-jump]');
       if (jumpBtn) {
         e.stopPropagation();
-        const idx = +jumpBtn.dataset.jump;
-        const issue = getFilteredIssues(jumpBtn.dataset.tab)[idx];
-        if (issue && issue.el) {
+        const gIdx = +jumpBtn.dataset.jump;
+        const elIdx = jumpBtn.dataset.el ? +jumpBtn.dataset.el : 0;
+        const group = renderedGroups[gIdx];
+        const el = group && group.els[elIdx];
+        if (el && document.body.contains(el)) {
           if (highlightedEl) {
             highlightedEl.style.outline = '';
             highlightedEl.style.outlineOffset = '';
           }
-          highlightedEl = issue.el;
-          issue.el.style.outline = '3px solid #6366f1';
-          issue.el.style.outlineOffset = '2px';
-          issue.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          highlightedEl = el;
+          el.style.outline = '3px solid #6366f1';
+          el.style.outlineOffset = '2px';
+
+          // The panel is a fixed, opaque 440px-wide overlay pinned to the right edge of the
+          // viewport, and scrollIntoView has no idea it exists — vertical scroll doesn't move
+          // the target horizontally, so if it's already in that column it'll stay hidden behind
+          // the panel. Rather than closing or minimizing the panel (it should stay visible),
+          // briefly fade it so the highlight is visible through it, only when actually needed.
+          const targetRect = el.getBoundingClientRect();
+          const needsPeek = !dvMinimized && targetRect.right > window.innerWidth - 440;
+          if (needsPeek) {
+            panel.style.transition = 'opacity .2s';
+            panel.style.opacity = '0.15';
+          }
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
           setTimeout(() => {
-            if (highlightedEl === issue.el) {
-              issue.el.style.outline = '';
-              issue.el.style.outlineOffset = '';
+            if (highlightedEl === el) {
+              el.style.outline = '';
+              el.style.outlineOffset = '';
             }
+            if (needsPeek) panel.style.opacity = '1';
           }, 3000);
+        } else {
+          // The element existed when the scan ran but is gone from the page now (dynamic
+          // content — an auto-dismissed toast, a re-rendered list, a removed validation
+          // error). Say so on the chip itself rather than silently doing nothing, which
+          // just looks broken.
+          jumpBtn.classList.add('stale');
+          jumpBtn.disabled = true;
+          jumpBtn.title = 'This element is no longer on the page — it may have been added or removed dynamically since the scan ran.';
         }
         return;
       }
@@ -1019,8 +1306,8 @@
 
     // Minimize / restore — accordion style
     let dvMinimized = false;
-    shadow.getElementById('dv-min').addEventListener('click', () => {
-      dvMinimized = !dvMinimized;
+    function setMinimized(min) {
+      dvMinimized = min;
       const btn = shadow.getElementById('dv-min');
       const secs = [
         shadow.querySelector('.summary'),
@@ -1045,7 +1332,8 @@
         btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="12" height="12" rx="3"/><line x1="4" y1="9.5" x2="10" y2="9.5"/></svg>';
         btn.title = 'Minimize'; btn.setAttribute('aria-label', 'Minimize');
       }
-    });
+    }
+    shadow.getElementById('dv-min').addEventListener('click', () => setMinimized(!dvMinimized));
 
     // Close panel
     shadow.getElementById('dv-close').addEventListener('click', () => {
