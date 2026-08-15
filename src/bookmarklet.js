@@ -40,6 +40,20 @@
     return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
   }
 
+  // getComputedStyle().backgroundColor is transparent (rgba(0,0,0,0)) whenever an element
+  // doesn't paint its own background, which is most text. Measuring contrast against that
+  // literal value scores text against black. Walk up to the first ancestor that actually
+  // paints a background; fall back to white if the whole chain is transparent.
+  function effectiveBackground(el) {
+    let node = el;
+    while (node) {
+      const bg = window.getComputedStyle(node).backgroundColor;
+      if (!/rgba\(\s*0,\s*0,\s*0,\s*0\s*\)/.test(bg) && bg !== 'transparent') return bg;
+      node = node.parentElement;
+    }
+    return 'rgb(255, 255, 255)';
+  }
+
   // Walk text nodes and flag pattern matches against their parent element
   // contextSelector (optional): only flag text found inside these UI container types.
   // Ensures we detect design patterns in live UI — not text that describes design patterns.
@@ -586,12 +600,16 @@
           'high');
       }
     });
-    const depth = window.location.pathname.split('/').filter(Boolean).length;
-    if (depth > 2 && !document.querySelector('[aria-label*="breadcrumb"],[class*="breadcrumb"]')) {
-      addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', document.body,
-        'Deep page URL but no breadcrumb navigation found',
-        'Add breadcrumbs on deep pages so users know where they are and can navigate up the hierarchy.',
-        'medium');
+    // Skip on file:// — the path there is the local folder structure, not site
+    // navigation depth, so it says nothing about whether breadcrumbs are needed.
+    if (window.location.protocol !== 'file:') {
+      const depth = window.location.pathname.split('/').filter(Boolean).length;
+      if (depth > 2 && !document.querySelector('[aria-label*="breadcrumb"],[class*="breadcrumb"]')) {
+        addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', document.body,
+          'Deep page URL but no breadcrumb navigation found',
+          'Add breadcrumbs on deep pages so users know where they are and can navigate up the hierarchy.',
+          'medium');
+      }
     }
   }
 
@@ -606,7 +624,9 @@
         'Add a visually hidden "Skip to main content" as the first focusable element — essential for keyboard users.',
         'high');
     }
-    const longList = document.querySelectorAll('li,tr,[class*="card"],[class*="item"]').length > 20;
+    const listCount = Array.from(document.querySelectorAll('li,tr,[class*="card"],[class*="item"]'))
+      .filter(el => !el.closest('[data-ds-ignore]')).length;
+    const longList = listCount > 20;
     const hasSearch = document.querySelector('[type="search"],[role="search"],[class*="search-input"]');
     if (longList && !hasSearch) {
       addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Low', document.body,
@@ -624,7 +644,8 @@
     document.querySelectorAll('p,span,label,a,button,h1,h2,h3,h4,h5,h6,li,td').forEach(el => {
       if (el.children.length > 0 || reported.has(el)) return;
       const s = window.getComputedStyle(el);
-      const ratio = contrastRatio(s.color, s.backgroundColor);
+      const bg = effectiveBackground(el);
+      const ratio = contrastRatio(s.color, bg);
       const isLargeText = parseFloat(s.fontSize) >= 18 ||
         (parseFloat(s.fontSize) >= 14 && +s.fontWeight >= 700);
       const minRatio = isLargeText ? 3 : 4.5;
@@ -635,7 +656,7 @@
         if (lowContrastCount <= 5) {
           addIssue('Nielsen Heuristic', 'H8: Aesthetics', ratio < 2 ? 'Critical' : 'High', el,
             `Contrast ratio ${ratio.toFixed(1)}:1 (WCAG AA minimum ${minRatio}:1)`,
-            `Increase contrast. Text: ${s.color} on ${s.backgroundColor}`,
+            `Increase contrast. Text: ${s.color} on ${bg}`,
             'high');
         }
       }
@@ -650,8 +671,11 @@
 
     // Too many font sizes = no type scale
     const fontSizes = new Set();
-    document.querySelectorAll('*').forEach(el => {
-      if (!el.children.length) fontSizes.add(window.getComputedStyle(el).fontSize);
+    const SKIP_TAGS = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE']);
+    document.body.querySelectorAll('*').forEach(el => {
+      if (SKIP_TAGS.has(el.tagName) || el.closest('script,style,noscript,template')) return;
+      if (el.children.length || !el.textContent.trim() || el.getClientRects().length === 0) return;
+      fontSizes.add(window.getComputedStyle(el).fontSize);
     });
     if (fontSizes.size > 8) {
       addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'Low', document.body,

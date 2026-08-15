@@ -67,12 +67,12 @@
           <span class="drag-arrow">→</span> Drag to your bookmarks bar
         </div>
 
-        <div class="hero-steps">
-          <span class="hero-step"><span class="hero-step-n">1</span> Drag to bookmarks bar</span>
+        <div class="flow-hints">
+          <span class="flow-hint"><span class="flow-hint-n">1</span> Drag to bookmarks bar</span>
           <span class="hero-sep">·</span>
-          <span class="hero-step"><span class="hero-step-n">2</span> Open any prototype</span>
+          <span class="flow-hint"><span class="flow-hint-n">2</span> Open any prototype</span>
           <span class="hero-sep">·</span>
-          <span class="hero-step"><span class="hero-step-n">3</span> Click — instant report</span>
+          <span class="flow-hint"><span class="flow-hint-n">3</span> Click — instant report</span>
         </div>
 
         <p class="csp-note">⚠ Some pages with strict Content Security Policies (CSP) block bookmarklets. This is the target site's own security setting — not a bug in this tool.</p>
@@ -107,24 +107,24 @@
       <div class="container">
         <h2>How it works</h2>
         <p class="section-sub">One drag to install. One click to audit. No account, no extension, no server.</p>
-        <div class="steps-grid">
-          <div class="step-card">
-            <div class="step-icon">1</div>
+        <div class="howto-grid">
+          <div class="howto-card">
+            <div class="howto-icon">1</div>
             <h3>Drag once</h3>
             <p>Drag the button above to your bookmarks bar. One-time setup — works in Chrome, Firefox, Safari, Edge.</p>
           </div>
-          <div class="step-card">
-            <div class="step-icon">2</div>
+          <div class="howto-card">
+            <div class="howto-icon">2</div>
             <h3>Open a prototype</h3>
             <p>Navigate to any HTML or React web prototype in your browser tab.</p>
           </div>
-          <div class="step-card">
-            <div class="step-icon">3</div>
+          <div class="howto-card">
+            <div class="howto-icon">3</div>
             <h3>Click &amp; analyze</h3>
             <p>Click designSense in your bar. A Shadow DOM panel opens with instant findings.</p>
           </div>
-          <div class="step-card">
-            <div class="step-icon">4</div>
+          <div class="howto-card">
+            <div class="howto-icon">4</div>
             <h3>Fix &amp; export</h3>
             <p>Click any issue to see the fix. Jump to the element on-page. Export the full report as JSON.</p>
           </div>
@@ -390,6 +390,20 @@
     if (!rgb1 || !rgb2) return 21;
     var l1 = luminance(rgb1), l2 = luminance(rgb2);
     return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+  }
+
+  // getComputedStyle().backgroundColor is transparent (rgba(0,0,0,0)) whenever an element
+  // doesn't paint its own background, which is most text. Measuring contrast against that
+  // literal value scores text against black. Walk up to the first ancestor that actually
+  // paints a background; fall back to white if the whole chain is transparent.
+  function effectiveBackground(el) {
+    var node = el;
+    while (node) {
+      var bg = window.getComputedStyle(node).backgroundColor;
+      if (!/rgba\(\s*0,\s*0,\s*0,\s*0\s*\)/.test(bg) && bg !== 'transparent') return bg;
+      node = node.parentElement;
+    }
+    return 'rgb(255, 255, 255)';
   }
 
   // contextSelector (optional): when provided, only flag text inside matching UI containers.
@@ -737,9 +751,13 @@
         addIssue('Nielsen Heuristic', 'H6: Recognition', 'High', el, 'Icon-only button with no accessible label (missing aria-label or title)', 'Add aria-label to every icon-only button. Icons alone are ambiguous.', 'high');
       }
     });
-    var depth = window.location.pathname.split('/').filter(Boolean).length;
-    if (depth > 2 && !document.querySelector('[aria-label*="breadcrumb"],[class*="breadcrumb"]')) {
-      addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', document.body, 'Deep page URL but no breadcrumb navigation found', 'Add breadcrumbs on deep pages so users know where they are.', 'medium');
+    // Skip on file:// — the path there is the local folder structure, not site
+    // navigation depth, so it says nothing about whether breadcrumbs are needed.
+    if (window.location.protocol !== 'file:') {
+      var depth = window.location.pathname.split('/').filter(Boolean).length;
+      if (depth > 2 && !document.querySelector('[aria-label*="breadcrumb"],[class*="breadcrumb"]')) {
+        addIssue('Nielsen Heuristic', 'H6: Recognition', 'Low', document.body, 'Deep page URL but no breadcrumb navigation found', 'Add breadcrumbs on deep pages so users know where they are.', 'medium');
+      }
     }
   }
 
@@ -748,7 +766,10 @@
     if (!skipLink) {
       addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Medium', document.body, 'No skip-to-content link found', 'Add a visually hidden "Skip to main content" as the first focusable element.', 'high');
     }
-    var longList = document.querySelectorAll('li,tr,[class*="card"],[class*="item"]').length > 20;
+    var listCount = Array.prototype.filter.call(document.querySelectorAll('li,tr,[class*="card"],[class*="item"]'), function(el) {
+      return !el.closest('[data-ds-ignore]');
+    }).length;
+    var longList = listCount > 20;
     var hasSearch = document.querySelector('[type="search"],[role="search"],[class*="search-input"]');
     if (longList && !hasSearch) {
       addIssue('Nielsen Heuristic', 'H7: Flexibility', 'Low', document.body, 'Long list/grid with no search or filter control', 'Add search or filter to help power users find items quickly.', 'best-effort');
@@ -761,14 +782,15 @@
     document.querySelectorAll('p,span,label,a,button,h1,h2,h3,h4,h5,h6,li,td').forEach(function(el) {
       if (el.children.length > 0 || reported.indexOf(el) !== -1) return;
       var s = window.getComputedStyle(el);
-      var ratio = contrastRatio(s.color, s.backgroundColor);
+      var bg = effectiveBackground(el);
+      var ratio = contrastRatio(s.color, bg);
       var isLargeText = parseFloat(s.fontSize) >= 18 || (parseFloat(s.fontSize) >= 14 && +s.fontWeight >= 700);
       var minRatio = isLargeText ? 3 : 4.5;
       if (ratio < minRatio) {
         lowContrastCount++;
         reported.push(el);
         if (lowContrastCount <= 5) {
-          addIssue('Nielsen Heuristic', 'H8: Aesthetics', ratio < 2 ? 'Critical' : 'High', el, 'Contrast ratio ' + ratio.toFixed(1) + ':1 (WCAG AA minimum ' + minRatio + ':1)', 'Increase contrast. Text: ' + s.color + ' on ' + s.backgroundColor, 'high');
+          addIssue('Nielsen Heuristic', 'H8: Aesthetics', ratio < 2 ? 'Critical' : 'High', el, 'Contrast ratio ' + ratio.toFixed(1) + ':1 (WCAG AA minimum ' + minRatio + ':1)', 'Increase contrast. Text: ' + s.color + ' on ' + bg, 'high');
         }
       }
     });
@@ -776,8 +798,12 @@
       addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'High', document.body, lowContrastCount + ' total low-contrast text elements (showing first 5 above)', 'Run a full WCAG AA contrast audit across all text in this design.', 'high');
     }
     var fontSizes = [];
-    document.querySelectorAll('*').forEach(function(el) {
-      if (!el.children.length) { var sz = window.getComputedStyle(el).fontSize; if (fontSizes.indexOf(sz) === -1) fontSizes.push(sz); }
+    document.body.querySelectorAll('*').forEach(function(el) {
+      if (el.tagName === 'SCRIPT' || el.tagName === 'STYLE' || el.tagName === 'NOSCRIPT' || el.tagName === 'TEMPLATE') return;
+      if (el.closest('script,style,noscript,template')) return;
+      if (el.children.length || !el.textContent.trim() || el.getClientRects().length === 0) return;
+      var sz = window.getComputedStyle(el).fontSize;
+      if (fontSizes.indexOf(sz) === -1) fontSizes.push(sz);
     });
     if (fontSizes.length > 8) {
       addIssue('Nielsen Heuristic', 'H8: Aesthetics', 'Low', document.body, fontSizes.length + ' distinct font sizes in use', 'Limit to 4-6 type scale steps. Too many sizes signal no consistent design system.', 'high');
