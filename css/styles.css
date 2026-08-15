@@ -101,6 +101,7 @@ body {
   font-size: 16px; color: var(--ink-muted);
   max-width: 520px; margin: 0 auto 48px; line-height: 1.65;
 }
+.hero-sub strong { color: var(--ink); font-weight: 700; }
 
 /* Bookmarklet button — pill, dark background */
 .bookmarklet-btn {
